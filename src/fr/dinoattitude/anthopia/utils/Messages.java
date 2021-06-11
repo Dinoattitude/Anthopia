@@ -15,7 +15,10 @@ public enum Messages {
 	INCOMPLETE_COMMAND("incomplete-command", "§cCommande Incomplète : "),
 	NOT_ENOUGH_MONEY("not-enough-money", "§cVous n'avez pas assez d'argent."),
 	NOT_ENOUGH_CB_MONEY("not-enough-cb-money", "§cVous n'avez pas assez d'argent dans votre compte bancaire."),
-	NO_PERMS("no-permissions", "§cVous n'avez pas les permissions necessaires pour effectuer cette action.");
+	NO_PERMS("no-permissions", "§cVous n'avez pas les permissions necessaires pour effectuer cette action."),
+	INCOMPLETE_COMMAND_COORD("incomplete-command-coords", "§cVous avez oublié une coordonnée."),
+	INCORRECT_COMMAND_COORD("incorrect-command-coords", "§cVous avez rentré une mauvaise coordonnée."),
+	INVALIDE_NAME("invalide_name", "§cVous avez rentré un nom déjà existant.");
 	
     private String path;
     private String def;
