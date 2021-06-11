@@ -97,6 +97,10 @@ public class Utilities {
 		return it;
 	}
 	
+	/** Gets the player's ping
+	 * @param player The player
+	 * @return The player's ping
+	 */
 	public static Integer getPing(Player player) {
 	    EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
 	    Integer ping = nmsPlayer.ping;

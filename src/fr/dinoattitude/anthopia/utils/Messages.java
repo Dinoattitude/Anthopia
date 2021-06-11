@@ -23,7 +23,7 @@ public enum Messages {
     
     /** Message enum constructor
      * @param path The string path
-     * @param start The defeult string
+     * @param start The default string
      */
     Messages(String path, String start) {
         this.path = path;
