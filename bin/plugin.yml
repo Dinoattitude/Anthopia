@@ -1,0 +1,24 @@
+main: fr.dinoattitude.anthopia.Main
+name: Anthopia
+version: 3.0.0
+author: Dinoattitude
+depend: [Vault,Landlord]
+api-version: 1.13
+commands: 
+   money: 
+   rank: 
+   help: 
+   pay: 
+   cac40: 
+   guild: 
+   coords:
+   restartauto:
+   restartath:
+   quote:
+   rules:
+   enchant:
+   don:
+   discord:
+   skipnight:
+   spec:
+   test:
