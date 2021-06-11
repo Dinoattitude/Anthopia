@@ -21,6 +21,8 @@ import fr.dinoattitude.anthopia.utils.Messages;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
+import fr.dinoattitude.anthopia.portals.PortalCommand;
+
 public class Main extends JavaPlugin{
 	
 	public static Main INSTANCE;
@@ -51,6 +53,7 @@ public class Main extends JavaPlugin{
 		//Setting executors to commands
 		this.getCommand("money").setExecutor(new EconomyCommand());
 		this.getCommand("guild").setExecutor(new GuildCommand());
+		this.getCommand("portal").setExecutor(new PortalCommand());
 	}
 	
 	@Override
