@@ -32,7 +32,7 @@ public class PortalData {
 		if(!file.exists()) {
 			try {
 				file.createNewFile();
-			}catch(IOException ioe) { ioe.printStackTrace();}
+			}catch(IOException ioe){ ioe.printStackTrace();}
 		}
 		config = YamlConfiguration.loadConfiguration(file);
 	}

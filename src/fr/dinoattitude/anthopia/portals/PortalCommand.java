@@ -30,7 +30,7 @@ public class PortalCommand extends PortalData implements CommandExecutor {
 					coordY=Integer.valueOf(args[2]);
 					coordZ=Integer.valueOf(args[3]);
 					System.out.println(getPortalName(args[4]));
-					if(getPortalName(args[4])==null) {
+					if(getPortalName(args[4])==null){
 						namePortal=args[4];
 						setPortalData(namePortal, coordX, coordY, coordZ);
 					}
