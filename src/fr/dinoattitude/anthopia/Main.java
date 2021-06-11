@@ -10,9 +10,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import biz.princeps.landlord.api.ILandLord;
 import fr.dinoattitude.anthopia.bourse.EconomyCommand;
+import fr.dinoattitude.anthopia.bourse.SalaryAttr;
 import fr.dinoattitude.anthopia.bourse.listeners.BlocksListener;
 import fr.dinoattitude.anthopia.bourse.listeners.ClaimListener;
 import fr.dinoattitude.anthopia.guild.GuildCommand;
@@ -20,8 +22,6 @@ import fr.dinoattitude.anthopia.guild.GuildListener;
 import fr.dinoattitude.anthopia.utils.Messages;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
-
-import fr.dinoattitude.anthopia.portals.PortalCommand;
 
 public class Main extends JavaPlugin{
 	
@@ -53,7 +53,15 @@ public class Main extends JavaPlugin{
 		//Setting executors to commands
 		this.getCommand("money").setExecutor(new EconomyCommand());
 		this.getCommand("guild").setExecutor(new GuildCommand());
-		this.getCommand("portal").setExecutor(new PortalCommand());
+		
+		new BukkitRunnable()
+		{
+		    @Override
+		    public void run()
+		    {
+		    	SalaryAttr.setExpAndSalary();
+		    }
+		}.runTaskTimer(this, 2 * 15 * 60 * 20L, 2 * 15 * 60 * 20L); //20L = 1s : 15 * 60 * 20L = 15min -> Actuellement 30 minutes
 	}
 	
 	@Override
