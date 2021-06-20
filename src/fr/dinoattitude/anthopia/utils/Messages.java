@@ -18,7 +18,8 @@ public enum Messages {
 	NO_PERMS("no-permissions", "§cVous n'avez pas les permissions necessaires pour effectuer cette action."),
 	INCOMPLETE_COMMAND_COORD("incomplete-command-coords", "§cVous avez oublié une coordonnée."),
 	INCORRECT_COMMAND_COORD("incorrect-command-coords", "§cVous avez rentré une mauvaise coordonnée."),
-	INVALIDE_NAME("invalide_name", "§cVous avez rentré un nom déjà existant.");
+	INVALIDE_NAME("invalide_name", "§cVous avez rentré un nom déjà existant."),
+	DISABLE_CMD("disable_name", "§cCette commande est désactivé temporairement.");
 	
     private String path;
     private String def;
