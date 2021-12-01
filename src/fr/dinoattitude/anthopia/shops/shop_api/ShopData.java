@@ -210,15 +210,15 @@ public class ShopData {
 		return amount;
 	}
 	
-	/** Gets the block type sold in the shop.
+	/** Gets the item sold in the shop.
 	 * @param playerUUID The player UUID.
-	 * @return The block type sold in the shop.
+	 * @return The item sold in the shop.
 	 */
-	public String getType(String playerUUID) {
+	public ItemStack getItem(String playerUUID) {
 		getPlayerShopConfig(playerUUID);
-		String type = "";
-		type = config.getString(world.getName() + "." + locX + " " + locY + " " + locZ + ".type");
-		return type;
+		ItemStack item = null;
+		item = (ItemStack) config.get(world.getName() + "." + locX + " " + locY + " " + locZ + ".item");
+		return item;
 	}
 	
 	/** Gets the unit price for purchase.
@@ -269,12 +269,12 @@ public class ShopData {
 	 * @param purchasePrice The unit price for purchase.
 	 * @param sellingPrice The unit price for sale.
 	 */
-	private void setShopData(int stock, int amount, String type, int purchasePrice, int sellingPrice) {
+	private void setShopData(int stock, int amount, ItemStack item, int purchasePrice, int sellingPrice) {
 		try {
 			getPlayerShopConfig(playerUuid);
 			config.set(world.getName() + "." + locX + " " + locY + " " + locZ + ".stock", stock);
 			config.set(world.getName() + "." + locX + " " + locY + " " + locZ + ".money", amount);
-			config.set(world.getName() + "." + locX + " " + locY + " " + locZ + ".type", type);
+			config.set(world.getName() + "." + locX + " " + locY + " " + locZ + ".item", item);
 			config.set(world.getName() + "." + locX + " " + locY + " " + locZ + ".purchasePrice", purchasePrice);
 			config.set(world.getName() + "." + locX + " " + locY + " " + locZ + ".sellingPrice", sellingPrice);
 			config.set(world.getName() + "." + locX + " " + locY + " " + locZ + ".rate", 1);
@@ -312,13 +312,13 @@ public class ShopData {
 		}
 	}
 	
-	/** Sets the block type sold in the shop.
-	 * @param type The block type sold in the shop.
+	/** Sets the itemStack sold in the shop.
+	 * @param type The item sold in the shop.
 	 */
-	public void setType(String type) {
+	public void setItem(ItemStack item) {
 		try {
 			getPlayerShopConfig(playerUuid);
-			config.set(world.getName() + "." + locX + " " + locY + " " + locZ + ".type", type);
+			config.set(world.getName() + "." + locX + " " + locY + " " + locZ + ".item", item);
 			config.save(file);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -377,11 +377,12 @@ public class ShopData {
 	/** Gets the owner shop inventory.
 	*/
 	public void getOwnerShop() {
+		ItemStack item = getItem(playerUuid);
 		Inventory i9 = Bukkit.createInventory(null, 9, "§8[§cAnthopia Shop§8] Vendeur");
-		i9.setItem(0, Utilities.getItem(Material.CHEST_MINECART, 1, "§6Déposer : " + getType(playerUuid), "En stock: " + getStock(playerUuid), null));
-		i9.setItem(1, Utilities.getItem(Material.HOPPER_MINECART, 1, "§6Retirer : " + getType(playerUuid), "En stock: " + getStock(playerUuid), null));
+		i9.setItem(0, Utilities.getItem(Material.CHEST_MINECART, 1, "§6Déposer : " + item.getType().toString(), "En stock: " + getStock(playerUuid), null));
+		i9.setItem(1, Utilities.getItem(Material.HOPPER_MINECART, 1, "§6Retirer : " + item.getType().toString(), "En stock: " + getStock(playerUuid), null));
 		i9.setItem(2, Utilities.getItem(Material.MINECART, getRateValue(), "§6Taux de change", "Clic droit pour augmenter", "Clic gauche pour diminuer"));
-		i9.setItem(4, new ItemStack(Material.getMaterial(getType(playerUuid)), 1));
+		i9.setItem(4, item);
 		if(getShopSaleType().equalsIgnoreCase("purchase"))
 			i9.setItem(6, Utilities.getItem(Material.PAPER, 1, "§6Montant récolté", "Total: " + getMoney(playerUuid), "Cliquez pour récolter"));
 		else
@@ -432,8 +433,9 @@ public class ShopData {
 	/** Create the inventory for switching the selling product.
 	*/
 	public void inventoryChangeItemShop() {
+		ItemStack item = getItem(playerUuid);
 		Inventory i9 = Bukkit.createInventory(null, 9, "§8[§cAnthopia Shop§8] Change item ?");
-		i9.setItem(4, Utilities.getItem(Material.getMaterial(getType(playerUuid)), 1, null, null, null));
+		i9.setItem(4, item);
 		player.openInventory(i9);
 	}
 	
@@ -519,17 +521,17 @@ public class ShopData {
 	/** Gets the next item witch will be displayed and remove the old one.
 	 * @param blockName The name of the item.
 	 */
-	public void replaceItem(String blockName) {
+	public void replaceItem(Material itemMaterial) {
 		Location max = new Location(world, locX, locY+1, locZ);
 		Location min = new Location(world, locX+1, locY-1, locZ+1);
 		deleteItem(max, min);
-		addDisplayedShopItem(blockName);
+		addDisplayedShopItem(itemMaterial);
 }
 	/** Display the new item onto the shop.
 	 * @param blockName the block who will be displayed.
 	 */
-	public void addDisplayedShopItem(String blockName) {
-		ItemStack iDrop = new ItemStack(Material.getMaterial(blockName), 1);
+	public void addDisplayedShopItem(Material itemMaterial) {
+		ItemStack iDrop = new ItemStack(itemMaterial, 1);
 		ItemMeta iDropm = (ItemMeta) iDrop.getItemMeta();
 		iDropm.setLore(Arrays.asList("FLOATING", "SHOP_ITEM"));
 		iDropm.setUnbreakable(true);
@@ -543,32 +545,49 @@ public class ShopData {
 	 * @param carpet The location of the carpet.
 	 * @param blockName The block name of the block we are selling.
 	 */
-	public void createShop(Location carpet, String blockName) {
+	public void createShop(Location carpet, ItemStack itemStack) {
 		carpet.getBlock().setType(Material.WHITE_CARPET);
-		addDisplayedShopItem(blockName);
-		setShopData(0, 0, blockName, 0, 0);
+		addDisplayedShopItem(itemStack.getType());
+		setShopData(0, 0, itemStack, 0, 0);
 		setShopSaleType(playerUuid, "purchase");
 	}
 	
 	/** Make the transaction for selling or buying an item.
 	 * @param amount The amount of blocks.
 	 */
-	public void tradeItem(int amount) {
+	public void tradeItem(int amount) { 
+		// EDIT: Mais ça n'a rien à foutre la ?! 
+		// EDIT: Moi du passé je te hais. C'est dla merde ptn. 
+		// EDIT: Est-ce qu'au moins ça marche ???
 		//PlayerInfo playerInfo = new PlayerInfo(player);
 		String owner = getShopOwner();
-		Material itemRA = Material.getMaterial(getType(owner)); 
+		Material itemRA = getItem(owner).getType();
+		ItemStack item = getItem(owner);
 		
 		if(getStock(owner) < amount) {
 			player.sendMessage("§cCe shop n'a plus assez d'item en stock !");
 		}
 		else if(getShopSaleType().equals("purchase")) {
 			if(EconomyData.getBalance(uuid) > getPurchasePrice(owner) * amount && amount > 0) {
-				setStock(owner, getStock(owner) - amount);
-				setMoney(owner, getMoney(owner) + (getPurchasePrice(owner) * amount));
-				EconomyData.setBalance(uuid, (double) EconomyData.getBalance(uuid) - getPurchasePrice(owner) * amount);
-				EconomyData.removeMoney(uuid, (double) getPurchasePrice(owner) * amount);
-				player.getInventory().addItem(new ItemStack(itemRA, amount));
-				player.sendMessage("§eVous avez acheté pour §6" + (getPurchasePrice(owner) * amount) + " §eeuros de marchandise.");
+				
+				if(isSpaceForItems(player, amount)) { //Voir si l'item est stackable
+					if(isItemStackable(item)) {
+						setItemsInInventory(player, amount, item);
+					}
+					else {
+						item.setAmount(amount);
+						player.getInventory().addItem(item);
+					}
+					setStock(owner, getStock(owner) - amount);
+					setMoney(owner, getMoney(owner) + (getPurchasePrice(owner) * amount));
+					EconomyData.setBalance(uuid, (double) EconomyData.getBalance(uuid) - getPurchasePrice(owner) * amount);
+					EconomyData.removeMoney(uuid, (double) getPurchasePrice(owner) * amount);
+					player.sendMessage("§eVous avez acheté pour §6" + (getPurchasePrice(owner) * amount) + " §eeuros de marchandise.");
+				}
+				else {
+					player.sendMessage("§8[§l§cAnthopia§r§8] §cIl n'y a pas assez de place dans votre inventaire.");
+				}
+				
 			}
 			else player.sendMessage("§8[§l§cAnthopia§r§8] §cVous n'avez pas assez d'argent pour acheter cette marchandise");
 			
@@ -623,6 +642,36 @@ public class ShopData {
 			case 6: return 1;
 		}
 		return 1;
+	}
+	
+	public boolean isSpaceForItems(Player player, int amount) {
+		int freeSlots = 0;
+		for(ItemStack stack : player.getInventory()) {
+			if(stack == null) {
+				freeSlots++;
+			}
+		}
+		
+		return freeSlots >= amount ? true : false;
+	}
+	
+	public void setItemsInInventory(Player player, int amount, ItemStack item) {
+		int compteur = 0;
+		for(ItemStack stack : player.getInventory()) {
+			if(stack == null) {
+				stack = item;
+			}
+			
+			if(compteur == amount) {
+				break;
+			}
+			
+			compteur++;
+		}
+	}
+	
+	public boolean isItemStackable(ItemStack item) {
+		return item.getMaxStackSize() != 1 ? true : false;
 	}
 
 }

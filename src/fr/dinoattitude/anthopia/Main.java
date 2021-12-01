@@ -19,10 +19,15 @@ import fr.dinoattitude.anthopia.bourse.listeners.BlocksListener;
 import fr.dinoattitude.anthopia.bourse.listeners.ClaimListener;
 import fr.dinoattitude.anthopia.guild.GuildCommand;
 import fr.dinoattitude.anthopia.guild.GuildListener;
+import fr.dinoattitude.anthopia.listeners.PlayerChatListener;
+import fr.dinoattitude.anthopia.listeners.PlayerJoinListener;
 import fr.dinoattitude.anthopia.utils.Messages;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import fr.dinoattitude.anthopia.portals.PortalCommand;
+import fr.dinoattitude.anthopia.shops.ChestShop;
+import fr.dinoattitude.anthopia.shops.ShopInventoryListener;
+import fr.dinoattitude.anthopia.shops.shop_api.ProtectChestShop;
 
 public class Main extends JavaPlugin{
 	
@@ -50,6 +55,11 @@ public class Main extends JavaPlugin{
 		pm.registerEvents(new BlocksListener(), this);
 		pm.registerEvents(new ClaimListener(), this);
 		pm.registerEvents(new GuildListener(), this);
+		pm.registerEvents(new ChestShop(), this);
+		pm.registerEvents(new ShopInventoryListener(), this);
+		pm.registerEvents(new ProtectChestShop(), this);
+		pm.registerEvents(new PlayerJoinListener(), this);
+		pm.registerEvents(new PlayerChatListener(), this);
 		
 		//Setting executors to commands
 		this.getCommand("money").setExecutor(new EconomyCommand());

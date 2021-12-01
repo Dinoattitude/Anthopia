@@ -12,6 +12,7 @@ import net.minecraft.server.v1_16_R2.IChatBaseComponent.ChatSerializer;
 
 public class Tablist {
 	
+	@SuppressWarnings("deprecation")
 	public static void Tab(Player player, String header, String footer) {
 		if(header == null) header = "";
 		if(footer == null) footer = "";

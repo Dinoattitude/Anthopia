@@ -6,8 +6,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/adrie/Desktop/Bureau 2.0/Programmation/Anthopia/Utilities/LandLord-latest-4.344.jar"/>
-	<classpathentry kind="lib" path="C:/Users/adrie/Desktop/Bureau 2.0/Programmation/Anthopia/Utilities/spigot-1.16.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/adrie/Desktop/Bureau 2.0/Programmation/Anthopia/Utilities/Vault.jar"/>
+	<classpathentry kind="lib" path="C:/Users/admin/Desktop/Anthopia/Utilities/LandLord-latest-4.344.jar"/>
+	<classpathentry kind="lib" path="C:/Users/admin/Desktop/Anthopia/Utilities/spigot-1.16.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/admin/Desktop/Anthopia/Utilities/Vault.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

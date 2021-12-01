@@ -19,7 +19,8 @@ public enum Messages {
 	INCOMPLETE_COMMAND_COORD("incomplete-command-coords", "§cVous avez oublié une coordonnée."),
 	INCORRECT_COMMAND_COORD("incorrect-command-coords", "§cVous avez rentré une mauvaise coordonnée."),
 	INVALIDE_NAME("invalide_name", "§cVous avez rentré un nom déjà existant."),
-	DISABLE_CMD("disable_name", "§cCette commande est désactivé temporairement.");
+	DISABLE_CMD("disable_name", "§cCette commande est désactivé temporairement."),
+	NOT_ENOUGH_PLACE("not_enough_place", "§cVous n'avez pas assez de place dans votre inventaire.");
 	
     private String path;
     private String def;

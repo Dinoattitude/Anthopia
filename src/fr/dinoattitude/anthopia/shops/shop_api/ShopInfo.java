@@ -1,8 +1,10 @@
 package fr.dinoattitude.anthopia.shops.shop_api;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 
 /** Accessor for the ShopData class.
@@ -86,8 +88,8 @@ public class ShopInfo {
 		return shopData.getMoney(PlayerUUID);
 	}
 	
-	public String getType(String playerUUID) {
-		return shopData.getType(playerUUID);
+	public ItemStack getItem(String playerUUID) {
+		return shopData.getItem(playerUUID);
 	}
 	
 	public int getPurchasePrice(String playerUUID) {
@@ -112,8 +114,8 @@ public class ShopInfo {
 		shopData.setMoney(playerUUID, amount);
 	}
 	
-	public void setType(String type) {
-		shopData.setType(type);
+	public void setItem(ItemStack item) {
+		shopData.setItem(item);
 	}
 	
 	public void setPurchasePrice(int purchasePrice) {
@@ -160,12 +162,12 @@ public class ShopInfo {
 		shopData.deleteItem(max, min);
 	}
 	
-	public void replaceItem(String blockName) {
-		shopData.replaceItem(blockName);
+	public void replaceItem(Material itemMaterial) {
+		shopData.replaceItem(itemMaterial);
 	}
 	
-	public void createShop(Location carpet, String blockName) {
-		shopData.createShop(carpet, blockName);
+	public void createShop(Location carpet, ItemStack itemStack) {
+		shopData.createShop(carpet, itemStack);
 	}
 	
 	public void tradeItem(int amount) {
