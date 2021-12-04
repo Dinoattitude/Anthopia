@@ -37,7 +37,7 @@ public class ShopInventoryListener implements Listener{
 
 		if(current != null) { //We check that there is an item
 			//Seller Inventory
-			if(event.getView().getTitle().equalsIgnoreCase("ï¿½8[ï¿½cAnthopia Shopï¿½8] Vendeur")) {
+			if(event.getView().getTitle().equalsIgnoreCase("§8[§cAnthopia Shop§8] Vendeur")) {
 				event.setCancelled(true); //We cancelled the event so that the player cannot take an item
 				ItemStack stack = shopInfo.getItem(playerUuid);
 				ItemStack stackChanged = stack;
@@ -47,7 +47,7 @@ public class ShopInventoryListener implements Listener{
 						shopInfo.setRate(2);
 					else
 						shopInfo.setRate(shopInfo.getRate() + 1);
-					event.getInventory().setItem(2, Utilities.getItem(Material.MINECART, shopInfo.getRateValue(), "ï¿½6Taux de change", "Clic droit pour augmenter", "Clic gauche pour diminuer"));
+					event.getInventory().setItem(2, Utilities.getItem(Material.MINECART, shopInfo.getRateValue(), "§6Taux de change", "Clic droit pour augmenter", "Clic gauche pour diminuer"));
 					player.updateInventory();
 				}
 				if(current.getType() == Material.CHEST_MINECART) { //Deposit of the items in the stock
@@ -57,12 +57,12 @@ public class ShopInventoryListener implements Listener{
 								stackChanged.setAmount(rate);
 								player.getInventory().removeItem(stackChanged);
 								shopInfo.setStock(playerUuid, stock + rate);
-								event.getInventory().setItem(0, Utilities.getItem(Material.CHEST_MINECART, 1, "ï¿½6Dï¿½poser : " + stack.getType().toString(), "En stock: " + shopInfo.getStock(playerUuid), null));
-								event.getInventory().setItem(1, Utilities.getItem(Material.HOPPER_MINECART, 1, "ï¿½6Retirer : " + stack.getType().toString(), "En stock: " + shopInfo.getStock(playerUuid), null));
+								event.getInventory().setItem(0, Utilities.getItem(Material.CHEST_MINECART, 1, "§6Déposer : " + stack.getType().toString(), "En stock: " + shopInfo.getStock(playerUuid), null));
+								event.getInventory().setItem(1, Utilities.getItem(Material.HOPPER_MINECART, 1, "§6Retirer : " + stack.getType().toString(), "En stock: " + shopInfo.getStock(playerUuid), null));
 								player.updateInventory();
 							}
 							else
-								player.sendMessage("ï¿½cVotre stock est plein !");
+								player.sendMessage("§cVotre stock est plein !");
 						}
 					}
 				}
@@ -72,8 +72,8 @@ public class ShopInventoryListener implements Listener{
 							stackChanged.setAmount(rate);
 							player.getInventory().addItem(stackChanged);
 							shopInfo.setStock(playerUuid, stock - rate);
-							event.getInventory().setItem(0, Utilities.getItem(Material.CHEST_MINECART, 1, "ï¿½6Dï¿½poser : " + stack.getType().toString(), "En stock: " + shopInfo.getStock(playerUuid), null));
-							event.getInventory().setItem(1, Utilities.getItem(Material.HOPPER_MINECART, 1, "ï¿½6Retirer : " + stack.getType().toString(), "En stock: " + shopInfo.getStock(playerUuid), null));
+							event.getInventory().setItem(0, Utilities.getItem(Material.CHEST_MINECART, 1, "§6Déposer : " + stack.getType().toString(), "En stock: " + shopInfo.getStock(playerUuid), null));
+							event.getInventory().setItem(1, Utilities.getItem(Material.HOPPER_MINECART, 1, "§6Retirer : " + stack.getType().toString(), "En stock: " + shopInfo.getStock(playerUuid), null));
 							player.updateInventory();
 						}
 						else {
@@ -81,7 +81,7 @@ public class ShopInventoryListener implements Listener{
 						}
 					}
 					else
-						player.sendMessage("ï¿½cVous n'avez pas ce nombre d'item disponible dans votre stock !");
+						player.sendMessage("§cVous n'avez pas ce nombre d'item disponible dans votre stock !");
 				}
 				if(current.getType() == Material.COMPARATOR) { //Modify the shop
 					player.closeInventory();
@@ -91,20 +91,20 @@ public class ShopInventoryListener implements Listener{
 				}
 				if(current.getType() == Material.PAPER) { //Taking or deposit money in the shop account
 					updateMoneyInShop(shopInfo, player, playerUuid);
-					event.getInventory().setItem(6, Utilities.getItem(Material.PAPER, 1, "ï¿½6Stock d'argent", "Montant: " + shopInfo.getMoney(playerUuid), "Cliquez pour ajouter 100 euros"));
+					event.getInventory().setItem(6, Utilities.getItem(Material.PAPER, 1, "§6Stock d'argent", "Montant: " + shopInfo.getMoney(playerUuid), "Cliquez pour ajouter 100 euros"));
 					player.updateInventory();
 
 				}
 				if(current.getType() == Material.OAK_SIGN) { //Changing the shop to "purchase" or "sale"
 					if(shopInfo.getShopSaleType().equalsIgnoreCase("purchase")) {
 						shopInfo.setShopSaleType(playerUuid,"sale");
-						event.getInventory().setItem(6, Utilities.getItem(Material.PAPER, 1, "ï¿½6Stock d'argent", "Montant: " + shopInfo.getMoney(playerUuid), "Cliquez pour ajouter 100 euros"));
+						event.getInventory().setItem(6, Utilities.getItem(Material.PAPER, 1, "§6Stock d'argent", "Montant: " + shopInfo.getMoney(playerUuid), "Cliquez pour ajouter 100 euros"));
 					}
 					else{
 						shopInfo.setShopSaleType(playerUuid,"purchase");
-						event.getInventory().setItem(6, Utilities.getItem(Material.PAPER, 1, "ï¿½6Montant rï¿½coltï¿½", "Total: " + shopInfo.getMoney(playerUuid), "Cliquez pour rï¿½colter"));
+						event.getInventory().setItem(6, Utilities.getItem(Material.PAPER, 1, "§6Montant récolté", "Total: " + shopInfo.getMoney(playerUuid), "Cliquez pour r§colter"));
 					}
-					event.getInventory().setItem(8, Utilities.getItem(Material.OAK_SIGN, 1, "ï¿½6Etat du shop :", "ï¿½3" + shopInfo.getShopSaleType(), "Cliquez pour changer"));
+					event.getInventory().setItem(8, Utilities.getItem(Material.OAK_SIGN, 1, "§6Etat du shop :", "§3" + shopInfo.getShopSaleType(), "Cliquez pour changer"));
 					player.updateInventory();
 				}
 				if(event.getSlot() == 4) { //Change the item sold in the shop
@@ -115,20 +115,20 @@ public class ShopInventoryListener implements Listener{
 						event.setCancelled(true);
 					}
 					else {
-						player.sendMessage("ï¿½cVeuillez vider votre stock avant de changer d'item");
+						player.sendMessage("§cVeuillez vider votre stock avant de changer d'item");
 						player.closeInventory();
 					}
 				}
 			}
 			//Buyer Inventory
-			else if(event.getView().getTitle().equalsIgnoreCase("ï¿½8[ï¿½cAnthopia Shopï¿½8] Acheteur")) {
+			else if(event.getView().getTitle().equalsIgnoreCase("§8[§cAnthopia Shop§8] Acheteur")) {
 
 				event.setCancelled(true);
 				buyerInventory(current.getType(), shopInfo, player, current);
 
 			}
 			//Create Shop Inventory
-			else if(event.getView().getTitle().equalsIgnoreCase("ï¿½8[ï¿½cAnthopia Shopï¿½8] Crï¿½er un shop ?")) {
+			else if(event.getView().getTitle().equalsIgnoreCase("§8[§cAnthopia Shop§8] Créer un shop ?")) {
 				event.setCancelled(true);
 
 				if(current.getType() == Material.RED_STAINED_GLASS_PANE) {
@@ -138,7 +138,7 @@ public class ShopInventoryListener implements Listener{
 					sellItem = pi.get(1);
 					if(sellItem == null) {
 						player.closeInventory();
-						player.sendMessage("ï¿½cVous devez choisir un item ï¿½ vendre !");
+						player.sendMessage("§cVous devez choisir un item à vendre !");
 					}
 					else {
 						shopInfo.createShop(ChestShop.getCarpet(), pi.get(1));
@@ -153,13 +153,13 @@ public class ShopInventoryListener implements Listener{
 				}
 			}
 			//Switch Item Inventory
-			else if(event.getView().getTitle().equalsIgnoreCase("ï¿½8[ï¿½cAnthopia Shopï¿½8] Change item ?")) {
+			else if(event.getView().getTitle().equalsIgnoreCase("§8[§cAnthopia Shop§8] Change item ?")) {
 				event.setCancelled(true); //Stopping the player from getting the item
 				inventoryChangeItemShop(player, shopInfo, current);
 				event.setCancelled(true);
 			}
 			//Modification of Price Inventory
-			else if(event.getView().getTitle().equalsIgnoreCase("ï¿½8[ï¿½cAnthopia Shopï¿½8] Modification")) {
+			else if(event.getView().getTitle().equalsIgnoreCase("§8[§cAnthopia Shop§8] Modification")) {
 				String playerUUID = shopInfo.getPlayer().getUniqueId().toString();
 
 				Material clickedMaterial = current.getType();
@@ -188,7 +188,7 @@ public class ShopInventoryListener implements Listener{
 				player.updateInventory();
 			}
 			//Delete Inventory
-			else if(event.getView().getTitle().equalsIgnoreCase("ï¿½8[ï¿½cAnthopia Shopï¿½8] Supprimer ?")) {
+			else if(event.getView().getTitle().equalsIgnoreCase("§8[§cAnthopia Shop§8] Supprimer ?")) {
 				event.setCancelled(true);
 				if(current.getType() == Material.RED_STAINED_GLASS_PANE) {
 					player.closeInventory();
@@ -207,7 +207,7 @@ public class ShopInventoryListener implements Listener{
 						player.closeInventory();
 					}
 					else
-						player.sendMessage("ï¿½cRetirez vos stocks et votre monnaie du shop avant de le dï¿½truire.");
+						player.sendMessage("§cRetirez vos stocks et votre monnaie du shop avant de le détruire.");
 				}
 			}
 		}
