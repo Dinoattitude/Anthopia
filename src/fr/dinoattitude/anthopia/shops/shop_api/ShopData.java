@@ -401,6 +401,8 @@ public class ShopData {
 		if(shopOwner != null) {
 			int priceAmount = 0;
 			String typeTransaction = "";
+			Material ownerMerchMaterial = getItem(ownerUUID).getType();
+			
 			if(getShopSaleType().equalsIgnoreCase("purchase")) {
 				i9.setItem(0, Utilities.getItem(Material.PAPER, 1, "§6Acheter", "Prix unitaire :", "" + getPurchasePrice(shopOwner) + " euros"));
 				priceAmount = getPurchasePrice(shopOwner);
@@ -411,11 +413,11 @@ public class ShopData {
 				priceAmount = getSellingPrice(shopOwner);
 				typeTransaction = "§6Vendre: ";
 			}
-			i9.setItem(2, Utilities.getItem(Material.GOLD_BLOCK, 64, typeTransaction, "x64 blocs ("+ (priceAmount * 64) + " euros)", null));
-			i9.setItem(3, Utilities.getItem(Material.GOLD_INGOT, 32, typeTransaction, "x32 blocs ("+ (priceAmount * 32) + " euros)", null));
-			i9.setItem(4, Utilities.getItem(Material.GOLD_NUGGET, 16, typeTransaction, "x16 blocs ("+ (priceAmount * 16) + " euros)", null));
-			i9.setItem(5, Utilities.getItem(Material.IRON_INGOT, 8, typeTransaction, "x8 blocs ("+ (priceAmount * 8) + " euros)", null));
-			i9.setItem(6, Utilities.getItem(Material.IRON_NUGGET, 1, typeTransaction, "x1 bloc ("+ (priceAmount) + " euros)", null));
+			i9.setItem(2, Utilities.getItem(ownerMerchMaterial, 64, typeTransaction, "x64 blocs ("+ (priceAmount * 64) + " euros)", null));
+			i9.setItem(3, Utilities.getItem(ownerMerchMaterial, 32, typeTransaction, "x32 blocs ("+ (priceAmount * 32) + " euros)", null));
+			i9.setItem(4, Utilities.getItem(ownerMerchMaterial, 16, typeTransaction, "x16 blocs ("+ (priceAmount * 16) + " euros)", null));
+			i9.setItem(5, Utilities.getItem(ownerMerchMaterial, 8, typeTransaction, "x8 blocs ("+ (priceAmount * 8) + " euros)", null));
+			i9.setItem(6, Utilities.getItem(ownerMerchMaterial, 1, typeTransaction, "x1 bloc ("+ (priceAmount) + " euros)", null));
 			i9.setItem(8, Utilities.getItem(Material.RED_STAINED_GLASS_PANE, 1, "§cQuitter le shop", null, null));
 			player.openInventory(i9);
 		}
@@ -580,7 +582,6 @@ public class ShopData {
 					}
 					setStock(owner, getStock(owner) - amount);
 					setMoney(owner, getMoney(owner) + (getPurchasePrice(owner) * amount));
-					EconomyData.setBalance(uuid, (double) EconomyData.getBalance(uuid) - getPurchasePrice(owner) * amount);
 					EconomyData.removeMoney(uuid, (double) getPurchasePrice(owner) * amount);
 					player.sendMessage("§eVous avez acheté pour §6" + (getPurchasePrice(owner) * amount) + " §eeuros de marchandise.");
 				}
@@ -600,7 +601,6 @@ public class ShopData {
 				else {
 					setStock(owner, getStock(owner) + amount);
 					setMoney(owner, getMoney(owner) - (getSellingPrice(owner) * amount));
-					EconomyData.setBalance(uuid, (double) EconomyData.getBalance(uuid) - getPurchasePrice(owner) * amount);
 					EconomyData.addMoney(uuid, (double) getPurchasePrice(owner) * amount);
 					player.getInventory().removeItem(new ItemStack(itemRA, amount));
 					player.sendMessage("§eVous avez vendu §6" + (getPurchasePrice(owner) * amount) + " §eeuros de marchandise.");

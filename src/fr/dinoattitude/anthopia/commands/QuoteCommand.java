@@ -28,16 +28,15 @@ public class QuoteCommand implements CommandExecutor{
 			String date = getDate();
 			
 			Player playerCible = Bukkit.getPlayer(playerName);
-			String text = getQuote(playerCible);
+			String quote = getQuote(playerCible);
 			
-			//Verification quote
-			boolean verifQuote = quoteData.isNewQuote(text);
+			/* Quote checks */
+			boolean verifQuote = quoteData.isNewQuote(quote);
 			if(verifQuote == true) {
 				player.sendMessage("§8[§l§cAnthopia§r§8] §cVous ne pouvez pas /quote un message déjà /quote.");
 				return true;
 			}
 			
-			String quote = getQuote(playerCible).replaceAll("'","#appo#");
 			if(player == playerCible) {
 				player.sendMessage("§8[§l§cAnthopia§r§8] §cVous ne pouvez pas vous /quote vous même !");
 				return true;

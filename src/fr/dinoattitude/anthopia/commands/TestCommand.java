@@ -9,6 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.dinoattitude.anthopia.bourse.economy_api.BourseData;
+import fr.dinoattitude.anthopia.bourse.economy_api.EconomyData;
+import fr.dinoattitude.anthopia.utils.Messages;
 
 
 public class TestCommand implements CommandExecutor{
@@ -25,10 +27,19 @@ public class TestCommand implements CommandExecutor{
 						}
 						else sender.sendMessage("§cErreur : Le joueur est null pour l'id §4"+ playerUuid);
 					}
+					
+					for (UUID playerUuid : EconomyData.getBalanceMap().keySet()) {
+						Player player = Bukkit.getPlayer(playerUuid);
+						if(player != null) {
+							sender.sendMessage(player.getName() + " |§6 " + EconomyData.getBalance(playerUuid) + " €");
+						}
+						else sender.sendMessage("§cErreur : Le joueur est null pour l'id §4"+ playerUuid);
+					}
 
 				}
 			}
 		}
+		sender.sendMessage(Messages.TEST.toString());
 		return false;
 	}
 

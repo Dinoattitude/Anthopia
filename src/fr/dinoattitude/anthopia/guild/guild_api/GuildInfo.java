@@ -19,6 +19,10 @@ public class GuildInfo {
 		guildData.deleteLogFile(guildName);
 	}
 	
+	public boolean isGuildExist(String guildName) {
+		return guildData.isGuildExist(guildName);
+	}
+	
 	//+------------------------------------------------------+ 
 	//|    	              Files - Getters                    | 
 	//+------------------------------------------------------+

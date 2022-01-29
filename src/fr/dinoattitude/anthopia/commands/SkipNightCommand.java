@@ -28,7 +28,7 @@ public class SkipNightCommand implements CommandExecutor{
 		Player player = (Player) sender;
 		
 		//récupère le monde et l'heure
-		World world = Bukkit.getWorld("Visiteur"); //Manuellement pour éviter les votes nether et end
+		World world = Bukkit.getWorld("world"); //Manuellement pour éviter les votes nether et end
 		long time= world.getTime();
 	
 		int nbPlayers = Bukkit.getOnlinePlayers().size();  //nombre joueur sur le serveur en ligne

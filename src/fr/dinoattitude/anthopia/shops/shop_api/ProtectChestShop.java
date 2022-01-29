@@ -22,10 +22,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-@SuppressWarnings("deprecation")
 /** Every event who are protecting the shop from being damaged.
  * @author Dinoattitude
  * @version 2.3.6
@@ -34,7 +32,7 @@ public class ProtectChestShop implements Listener{
 	
 	//Toutes les méthodes accèdent au fichier général du shop
 	//Sauf: Méthodes avec events
-	private World world = Bukkit.getWorld("Visiteur"); //Attention au nom du monde qui peux faire des threads infinis dans la console
+	private World world = Bukkit.getWorld("world"); //Attention au nom du monde qui peux faire des threads infinis dans la console
 	
 	private FileConfiguration config;
 	private File file;
@@ -164,17 +162,7 @@ public class ProtectChestShop implements Listener{
 	
 	//Event that prevent a player from pick up the item on the shop
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void itemPickup(PlayerPickupItemEvent event) {
-		if(event.getItem().getItemStack() == null) return;
-		if(event.getItem().getItemStack().getItemMeta().getLore() == null) return;
-		if(event.getItem().getItemStack().getItemMeta().getLore().contains("FLOATING")) {
-			event.setCancelled(true);
-		}
-	}
-	
-	//Event that prevent a mob from picking up the item on the shop
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void mobItemPickup(EntityPickupItemEvent event) {
+	public void itemPickup(EntityPickupItemEvent event) {
 		if(event.getItem().getItemStack() == null) return;
 		if(event.getItem().getItemStack().getItemMeta().getLore() == null) return;
 		if(event.getItem().getItemStack().getItemMeta().getLore().contains("FLOATING")) {

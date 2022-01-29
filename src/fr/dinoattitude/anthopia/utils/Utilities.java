@@ -6,17 +6,17 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
+//import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import net.minecraft.server.v1_16_R2.EntityPlayer;
+//import net.minecraft.server.v1_16_R2.EntityPlayer;
 
 /** Contains various useful functions all over the plugin
  * @author Dinoattitude
- * @version 3.0.0
+ * @version 2.4.3
  */
 public class Utilities {
 	
@@ -95,16 +95,6 @@ public class Utilities {
 		itM.setLore(Arrays.asList(info1,info2));
 		it.setItemMeta(itM);
 		return it;
-	}
-	
-	/** Gets the player's ping
-	 * @param player The player
-	 * @return The player's ping
-	 */
-	public static Integer getPing(Player player) {
-	    EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
-	    Integer ping = nmsPlayer.ping;
-	    return ping;
 	}
 	
 }

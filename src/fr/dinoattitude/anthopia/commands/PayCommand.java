@@ -28,8 +28,6 @@ public class PayCommand implements CommandExecutor{
 					if(EconomyData.getBalance(player.getUniqueId()) > amount && amount > 0) {
 						EconomyData.addMoney(target.getUniqueId(), amount);
 						EconomyData.removeMoney(player.getUniqueId(), amount);
-						EconomyData.setBalance(target.getUniqueId(), EconomyData.getBalance(target.getUniqueId()) + amount);
-						EconomyData.setBalance(player.getUniqueId(), EconomyData.getBalance(player.getUniqueId()) - amount);
 						sender.sendMessage("§eVous avez envoyé §6" + amount + " €  à " + target.getName());
 						target.sendMessage("§eVous avez reçu §6" + amount + " €  de la part de " + sender.getName());
 					}

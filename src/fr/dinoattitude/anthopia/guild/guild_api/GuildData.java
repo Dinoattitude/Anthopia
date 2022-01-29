@@ -88,6 +88,11 @@ public class GuildData {
 		else System.out.println("Erreur dans la suppression des logs de la guilde " + guildName);
 	}
 	
+	public boolean isGuildExist(String guildName) {
+		getConfig();
+		return config.contains(guildName);
+	}
+	
 	//############################################################
 	//# +------------------------------------------------------+ #
 	//# |    	          Getters and Setters                  | #
@@ -191,9 +196,14 @@ public class GuildData {
 	public Location getHomeLocation(String guildName) {
 		getConfig();
 		String world = config.getString(TAG + guildName + ".location.world");
-		int locX = config.getInt(TAG + guildName + ".location.locX");
-		int locY = config.getInt(TAG + guildName + ".location.locY");
-		int locZ = config.getInt(TAG + guildName + ".location.locZ");
+		Integer locX = config.getInt(TAG + guildName + ".location.locX");
+		Integer locY = config.getInt(TAG + guildName + ".location.locY");
+		Integer locZ = config.getInt(TAG + guildName + ".location.locZ");
+		
+		if(world == null || world.isEmpty()) {
+			return null;
+		}
+		
 		Location home = new Location(Bukkit.getWorld(world), locX, locY, locZ);
 		return home;
 	}
@@ -366,8 +376,7 @@ public class GuildData {
 			config.save(file);
 			
 			PlayerData playerData = new PlayerData(playerUuid);
-			playerData.setGuild("none");
-			playerData.setGuildRank(0);
+			playerData.resetGuild();
 
 		} catch (IOException e) {
 			e.printStackTrace();

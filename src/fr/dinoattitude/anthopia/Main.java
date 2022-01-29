@@ -3,7 +3,7 @@ package fr.dinoattitude.anthopia;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,6 +15,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import biz.princeps.landlord.api.ILandLord;
 import fr.dinoattitude.anthopia.bourse.EconomyCommand;
 import fr.dinoattitude.anthopia.bourse.SalaryAttr;
+import fr.dinoattitude.anthopia.bourse.economy_api.BourseData;
+//import fr.dinoattitude.anthopia.bourse.economy_api.EconomyData;
 import fr.dinoattitude.anthopia.bourse.listeners.BlocksListener;
 import fr.dinoattitude.anthopia.bourse.listeners.ClaimListener;
 import fr.dinoattitude.anthopia.commands.CacCommand;
@@ -39,7 +41,6 @@ import fr.dinoattitude.anthopia.listeners.PlayerJoinListener;
 import fr.dinoattitude.anthopia.utils.Messages;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
-import fr.dinoattitude.anthopia.portals.PortalCommand;
 import fr.dinoattitude.anthopia.shops.ChestShop;
 import fr.dinoattitude.anthopia.shops.ShopInventoryListener;
 import fr.dinoattitude.anthopia.shops.shop_api.ProtectChestShop;
@@ -50,9 +51,11 @@ public class Main extends JavaPlugin{
 
 	@SuppressWarnings("unused")
 	private ILandLord llAPI;
+	private static Logger log;
+	
 	private static Economy economy = null;
 	private static Permission permission = null;
-
+	
 	public static YamlConfiguration LANG;
 	public static File LANG_FILE;
 
@@ -60,10 +63,20 @@ public class Main extends JavaPlugin{
 	public void onEnable() {
 
 		INSTANCE = this;
+		
+		log = this.getLogger();
 
 		//Controls before runnable
+		checkVaultApi();
 		checkLandLordApi();
 		loadLang();
+		
+		//Bourse
+		try {
+			BourseData.loadBlockPrice();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		//PluginManager registering events
 		PluginManager pm = Bukkit.getPluginManager();
@@ -80,7 +93,7 @@ public class Main extends JavaPlugin{
 		//Setting executors to commands
 		this.getCommand("money").setExecutor(new EconomyCommand());
 		this.getCommand("guild").setExecutor(new GuildCommand());
-		this.getCommand("portal").setExecutor(new PortalCommand());
+		//this.getCommand("portal").setExecutor(new PortalCommand());
 		this.getCommand("rank").setExecutor(new RankCommand());
 		this.getCommand("help").setExecutor(new HelpCommand());
 		this.getCommand("pay").setExecutor(new PayCommand());
@@ -103,14 +116,17 @@ public class Main extends JavaPlugin{
 		    @Override
 		    public void run()
 		    {
-		    	SalaryAttr.setExpAndSalary();
+		    	SalaryAttr salaryAttr = new SalaryAttr();
+				salaryAttr.setExpAndSalary();
 		    }
 		}.runTaskTimer(this, 2 * 15 * 60 * 20L, 2 * 15 * 60 * 20L); //20L = 1s : 15 * 60 * 20L = 15min -> Actuellement 30 minutes
 	}
 
 	@Override
 	public void onDisable() {
-		//On met rien dedans pour le moment (Pas besoin)
+		//Dino : ThreadSafe update in PlayerQuitListener, no longer mandatory
+		//Sauvegarde des comptes bancaires des joueurs
+		//EconomyData.saveAllPlayersEconomy();
 	}
 
 	//############################################################
@@ -133,7 +149,7 @@ public class Main extends JavaPlugin{
 		try {
             this.llAPI = (ILandLord) getServer().getPluginManager().getPlugin("Landlord");
         } catch (NoClassDefFoundError ex) {
-            getLogger().warning("Landlord missing!");
+        	setWarningLog("Landlord missing!");
             return;
         }
 	}
@@ -141,6 +157,15 @@ public class Main extends JavaPlugin{
 	// +------------------------------------------------------+
 	// |                       Vault                          |
 	// +------------------------------------------------------+
+	
+	public void checkVaultApi() {
+		if(!setupEconomy()) {
+			log.severe("Disabled due to no Vault dependency found!" + getDescription().getName().toString());
+			getServer().getPluginManager().disablePlugin(INSTANCE);
+			return;
+		}
+		setupPermissions();
+	}
 
 	//Check if Vault's economy is working
 	public boolean setupEconomy() {
@@ -191,8 +216,8 @@ public class Main extends JavaPlugin{
 	            }
 	        } catch(IOException e) {
 	            e.printStackTrace();
-	            getLogger().severe("[Anthopia] Couldn't create language file.");
-	            getLogger().severe("[Anthopia] This is a fatal error. Now disabling");
+	            setSevereLog("Couldn't create language file.");
+	            setSevereLog("This is a fatal error. Now disabling");
 	            this.setEnabled(false);
 	        }
 	    }
@@ -208,8 +233,8 @@ public class Main extends JavaPlugin{
 	    try {
 	        conf.save(getLangFile());
 	    } catch(IOException e) {
-	    	getLogger().log(Level.WARNING, "Anthopia: Failed to save lang.yml.");
-	    	getLogger().log(Level.WARNING, "Anthopia: Report this stack trace to Dinoattitude.");
+	    	setWarningLog("Failed to save lang.yml.");
+	    	setWarningLog("Report this stack trace to Dinoattitude.");
 	        e.printStackTrace();
 	    }
 	}
@@ -229,6 +254,21 @@ public class Main extends JavaPlugin{
 	public File getLangFile() {
 	    return LANG_FILE;
 	}
-
+	
+	// +------------------------------------------------------+
+	// |                       Logger                         |
+	// +------------------------------------------------------+
+	
+	public static void setInfoLog(String message) {
+		log.info(message);
+	}
+	
+	public static void setWarningLog(String message) {
+		log.warning(message);
+	}
+	
+	public static void setSevereLog(String message) {
+		log.severe(message);
+	}
 
 }

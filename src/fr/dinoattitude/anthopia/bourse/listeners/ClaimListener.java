@@ -28,7 +28,6 @@ public class ClaimListener implements Listener{
 		Player player  = event.getPlayer();
 		if(EconomyData.getBalance(player.getUniqueId()) > landValue) {
 			EconomyData.removeMoney(player.getUniqueId(), landValue);
-			EconomyData.setBalance(player.getUniqueId(), EconomyData.getBalance(player.getUniqueId()) - landValue);
 		}
 		else player.sendMessage("§8[§l§cAnthopia§r§8] §cVous n'avez pas assez d'argent pour claim !");
 	}
@@ -37,7 +36,6 @@ public class ClaimListener implements Listener{
 	public void onLandUnclaimEvent(LandUnclaimEvent event) {
 		Player player  = event.getPlayer();
 		EconomyData.addMoney(player.getUniqueId(), landConsumedValue);
-		EconomyData.setBalance(player.getUniqueId(), EconomyData.getBalance(player.getUniqueId()) + landConsumedValue);
 	}
 	
 }

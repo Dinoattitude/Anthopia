@@ -77,7 +77,7 @@ public class ShopInventoryListener implements Listener{
 							player.updateInventory();
 						}
 						else {
-							player.sendMessage(Messages.PLUGIN_NAME + " " + Messages.NOT_ENOUGH_PLACE);
+							player.sendMessage(Messages.NOT_ENOUGH_PLACE.toString());
 						}
 					}
 					else
@@ -282,61 +282,37 @@ public class ShopInventoryListener implements Listener{
 	}
 
 	public void buyerInventory(Material material, ShopInfo shopInfo, Player player, ItemStack itemStack) {
-		int amount = 0;
-
-		switch(material) {
-			case RED_STAINED_GLASS_PANE : {
-				player.closeInventory(); break;
-			}
-			case GOLD_BLOCK : {
-				amount = 64;
-				break;
-			}
-			case GOLD_INGOT : {
-				amount = 32;
-				break;
-			}
-			case GOLD_NUGGET : {
-				amount = 16;
-				break;
-			}
-			case IRON_INGOT : {
-				amount = 8;
-				break;
-			}
-			case IRON_NUGGET : {
-				amount = 1;
-				break;
-			}
-			default: break;
+		
+		if(material == Material.RED_STAINED_GLASS_PANE) {
+			player.closeInventory();
+			return;
 		}
+		
+		int amount = itemStack.getAmount();
 
 		if(amount != 0) {
-			if(isSpaceToTrade(player, itemStack, amount)) {
+			if(isSpaceToTrade(player, amount)) {
 				shopInfo.tradeItem(amount);
 			}
 			else {
-				player.sendMessage(Messages.PLUGIN_NAME + " " + Messages.NOT_ENOUGH_PLACE);
+				player.sendMessage(Messages.NOT_ENOUGH_PLACE.toString());
 			}
 		}
-
 	}
 
 	public void updateMoneyInShop(ShopInfo shopInfo, Player player, String playerUuid) {
 		if(shopInfo.getShopSaleType().equalsIgnoreCase("purchase") && shopInfo.getMoney(playerUuid) > 0) {
-			EconomyData.setBalance(player.getUniqueId(), EconomyData.getBalance(player.getUniqueId()) + shopInfo.getMoney(playerUuid));
 			EconomyData.addMoney(player.getUniqueId(), shopInfo.getMoney(playerUuid));
 			shopInfo.setMoney(playerUuid, 0);
 		}
 		else {
-			EconomyData.setBalance(player.getUniqueId(), EconomyData.getBalance(player.getUniqueId()) - shopInfo.getMoney(playerUuid));
 			EconomyData.removeMoney(player.getUniqueId(), 100);
 			shopInfo.setMoney(playerUuid, shopInfo.getMoney(playerUuid) + 100);
 		}
 
 	}
 
-	public boolean isSpaceToTrade(Player player, ItemStack stack, int amount) {
+	public boolean isSpaceToTrade(Player player, int amount) {
 
 		if(isSpaceInPlayerInventory(player) && isSpaceForItems(player, amount)) {
 			return true;

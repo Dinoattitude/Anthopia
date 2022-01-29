@@ -11,24 +11,24 @@ public enum Salary {
 	LEVEL_99(99, 35, 25),
 	LEVEL_MAX(100, 40, 30);
 	
-	private int level, gainAlloc, gainSalary;
+	private int level, compensation, salary;
 
-	private Salary(int level, int gainAlloc, int gainSalary) {
+	private Salary(int level, int compensation, int salary) {
 		this.level = level;
-		this.gainAlloc = gainAlloc;
-		this.gainSalary = gainSalary;
+		this.compensation = compensation;
+		this.salary = salary;
 	}
 
 	public int getLevel() {
 		return level;
 	}
 
-	public int getGainAlloc() {
-		return gainAlloc;
+	public int getCompensationAmount() {
+		return compensation;
 	}
 
-	public int getGainSalary() {
-		return gainSalary;
+	public int getSalaryAmount() {
+		return salary;
 	}
 
 }

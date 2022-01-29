@@ -15,6 +15,7 @@ public class PlayerData {
 	
 	private FileConfiguration config;
 	private File file;
+	private final String FILE_DIR = "plugins/Anthopia/";
 	private final String FILE_NAME = "PlayersData"; 
 
 	private UUID uuid;
@@ -45,7 +46,7 @@ public class PlayerData {
 	
 	/** Initializing player files and verification of its existence. */
 	private void initPlayerConfig() {
-		File f = new File("plugins/Anthopia/" + FILE_NAME);
+		File f = new File(FILE_DIR + FILE_NAME);
 		if(!f.exists()) f.mkdirs();
 		file = new File(f, uuid.toString() + ".yml");
 		if(!file.exists()) {
@@ -136,12 +137,12 @@ public class PlayerData {
 	public void addNewPlayerData() {
 		try {
 			getPlayerConfig();
-			config.set("rank", 1);
+			config.set("rank", 0);
 			config.set("money", 200);
 			config.set("cb", 0);
-			config.set("guild", "none");
-			config.set("guildRank", "0");
-			config.set("playtime", "0");
+			config.set("guild", "");
+			config.set("guildRank", 0);
+			config.set("playtime", 0);
 			config.save(file);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -226,6 +227,23 @@ public class PlayerData {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	//############################################################
+	//# +------------------------------------------------------+ #
+	//# |                      Others                          | #
+	//# +------------------------------------------------------+ #
+	//############################################################
+	
+	public void resetGuild() {
+		setGuild("");
+		setGuildRank(0);
+	}
+	
+	public boolean isPlayerFileExist() {
+		File dir = new File(FILE_DIR + FILE_NAME);
+		File playerFile = new File(dir, uuid.toString() + ".yml");
+		return playerFile.exists();
 	}
 	
 }

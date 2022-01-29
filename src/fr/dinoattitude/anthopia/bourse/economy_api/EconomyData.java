@@ -1,6 +1,7 @@
 package fr.dinoattitude.anthopia.bourse.economy_api;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -13,7 +14,6 @@ public class EconomyData {
 	
 	public static HashMap<UUID,Double> balance = new HashMap<>();
 	public static HashMap<UUID,Double> bankAccount = new HashMap<>();
-	
 	
 	//Balance's methods
 	
@@ -33,18 +33,24 @@ public class EconomyData {
 		return balance;
 	}
 	
+	public static void removeBalanceFromMap(UUID uuid) {
+		balance.remove(uuid);
+	}
+	
 	public static void addMoney(UUID uuid, double amount) {
 		Player p = Bukkit.getPlayer(uuid);
-		if(Main.getInstance().setupEconomy()) {
-			Main.getEconomy().depositPlayer(p, amount);
+		Main.getEconomy().depositPlayer(p, amount);
+		if(getBalance(uuid) == null) {
+			setBalance(uuid, amount);
+			return;
 		}
+		setBalance(uuid, getBalance(uuid) + amount);
 	}
 	
 	public static void removeMoney(UUID uuid, double amount) {
 		Player p = Bukkit.getPlayer(uuid);
-		if(Main.getInstance().setupEconomy()) {
-			Main.getEconomy().withdrawPlayer(p, amount);
-		}
+		Main.getEconomy().withdrawPlayer(p, amount);
+		setBalance(uuid, getBalance(uuid) - amount);
 	}
 	
 	//BankAccount's methods
@@ -65,6 +71,10 @@ public class EconomyData {
 		return bankAccount;
 	}
 	
+	public static void removeBankAccountFromMap(UUID uuid) {
+		bankAccount.remove(uuid);
+	}
+	
 	//Others
 	
 	public static void loadPlayerEconomy(UUID uuid) {
@@ -79,6 +89,19 @@ public class EconomyData {
 
 		playerData.setMoney(getBalance(uuid));
 		playerData.setCb(getBankAccount(uuid));
+		
+		removeBalanceFromMap(uuid);
+		removeBankAccountFromMap(uuid);
+	}
+	
+	public static void saveAllPlayersEconomy() {
+		if(balance.isEmpty()) {
+			return;
+		}
+		
+		for(Map.Entry<UUID, Double> entry : balance.entrySet()) {
+			savePlayerEconomy(entry.getKey());
+		}
 	}
 	
 }

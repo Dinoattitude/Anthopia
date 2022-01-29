@@ -8,6 +8,8 @@ import java.util.UUID;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import fr.dinoattitude.anthopia.Main;
+
 public class BourseData {
 	
 	public static HashMap<UUID, Double> salary = new HashMap<UUID, Double>(); //Player's salary [Player, salary]
@@ -43,7 +45,7 @@ public class BourseData {
         for (String key : config.getConfigurationSection("Values").getKeys(false)) {
         	blockInitPrice.put(key, getBourseConfig(BOURSEINI).getDouble("Values." + key));
         }
-        System.out.println(blockInitPrice.size() + " values loaded.");
+        Main.setInfoLog(BourseData.class.getSimpleName() + " : " + blockInitPrice.size() + " values loaded.");
     }
 	
 	// +------------------------------------------------------+ 
@@ -99,7 +101,7 @@ public class BourseData {
         for (String uuid : config.getConfigurationSection("Player").getKeys(false)) {
         	savedSalary.put(UUID.fromString(uuid), getBourseConfig(BOURSESAVESALARY).getDouble("Player." + uuid));
         }
-        System.out.println(blockInitPrice.size() + " Temporary salary loaded.");
+        Main.setInfoLog(this.getClass().getSimpleName() + " : " + blockInitPrice.size() + " Temporary salary loaded.");
 	}
 	
 	

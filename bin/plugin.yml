@@ -1,6 +1,6 @@
 main: fr.dinoattitude.anthopia.Main
 name: Anthopia
-version: 3.0.0
+version: 2.4.3
 author: Dinoattitude
 depend: [Vault,Landlord]
 api-version: 1.13

@@ -2,7 +2,6 @@ package fr.dinoattitude.anthopia.portals.portals_api;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
