@@ -199,7 +199,7 @@ public class PlayerJoinListener implements Listener {
 						EconomyData.loadPlayerEconomy(playerUUID);
 					}
 					
-					if(VAULT_BALANCE < INTERN_BALANCE) {
+					if(VAULT_BALANCE > INTERN_BALANCE) {
 						return;
 					}
 					

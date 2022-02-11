@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import fr.dinoattitude.anthopia.shops.shop_api.ShopInfo;
+import fr.dinoattitude.anthopia.utils.Messages;
 
 
 public class ChestShop implements Listener{
@@ -51,6 +52,11 @@ public class ChestShop implements Listener{
 		if(player.getInventory().getItemInMainHand().equals(stick) && (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.CHEST)) {
 			event.setCancelled(true); //Cancelling the event
 			
+			player.sendMessage(Messages.DISABLE_CMD.toString());
+			return;
+			
+			/*
+			
 			world = player.getWorld();
 			
 			//Gets the location of the shop
@@ -83,11 +89,16 @@ public class ChestShop implements Listener{
 				}
 				else
 					player.sendMessage("§cVous ne pouvez pas construire un shop ici !");
-			}
+			}*/
 		}
 		//If want to destroy the shop :
 		else if(player.getInventory().getItemInMainHand().equals(stick) && (event.getAction() == Action.LEFT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.CHEST)) {
 			event.setCancelled(true);
+			
+			player.sendMessage(Messages.DISABLE_CMD.toString());
+			return;
+			
+			/*
 
 			world = player.getWorld();
 			
@@ -102,7 +113,7 @@ public class ChestShop implements Listener{
 			}
 			else
 				player.sendMessage("§cVous ne pouvez pas détruire un shop qui ne vous appratient pas !");
-
+			*/
 		}
 	}
 }
