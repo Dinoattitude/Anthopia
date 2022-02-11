@@ -1,5 +1,6 @@
 package fr.dinoattitude.anthopia.commands;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,12 +26,18 @@ public class RankCommand implements CommandExecutor{
 		boolean bypass = isOp(sender);
 		
 		if(args.length <= 1) {
-			sender.sendMessage(Messages.PLUGIN_NAME + " " + Messages.INCORRECT_COMMAND + " <playerName> <rank>");
+			sender.sendMessage(Messages.INCORRECT_COMMAND.toString() + " <playerName> <rank>");
 			return true;
 		}
 		
 		Player target = Bukkit.getPlayer(args[0]);
 		PlayerData targetData = new PlayerData(target.getUniqueId());
+		
+		if(!StringUtils.isNumeric(args[1])) {
+			sender.sendMessage(Messages.INCORRECT_COMMAND.toString() + " Vous devez spécifier un nombre.");
+			return true;
+		}
+		
 		int power = Integer.valueOf(args[1]);
 		
 		if(bypass) {

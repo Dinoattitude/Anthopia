@@ -39,6 +39,7 @@ import fr.dinoattitude.anthopia.listeners.PlayerChatListener;
 import fr.dinoattitude.anthopia.listeners.PlayerDeathListener;
 import fr.dinoattitude.anthopia.listeners.PlayerJoinListener;
 import fr.dinoattitude.anthopia.utils.Messages;
+import fr.dinoattitude.anthopia.utils.QuoteData;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import fr.dinoattitude.anthopia.shops.ChestShop;
@@ -65,6 +66,8 @@ public class Main extends JavaPlugin{
 		INSTANCE = this;
 		
 		log = this.getLogger();
+		
+		QuoteData quoteData = new QuoteData();
 
 		//Controls before runnable
 		checkVaultApi();
@@ -74,6 +77,7 @@ public class Main extends JavaPlugin{
 		//Bourse
 		try {
 			BourseData.loadBlockPrice();
+			quoteData.initFormatedQuotes();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

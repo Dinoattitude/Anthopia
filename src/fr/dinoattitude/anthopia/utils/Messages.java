@@ -25,7 +25,8 @@ public enum Messages {
 	INVALIDE_NAME("invalide_name", "§cVous avez rentré un nom déjà existant."),
 	DISABLE_CMD("disable_name", "§cCette commande est désactivé temporairement."),
 	TEST("test", "§eCeci est un test de fonctionnement des messages."),
-	NOT_ENOUGH_PLACE("not_enough_place", "§cVous n'avez pas assez de place dans votre inventaire.");
+	NOT_ENOUGH_PLACE("not_enough_place", "§cVous n'avez pas assez de place dans votre inventaire."),
+	NO_QUOTES("no-quotes", "§cAucune quote n'est enregistrée pour le moment.");
 	
     private String path;
     private String def;

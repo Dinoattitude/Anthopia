@@ -47,6 +47,7 @@ public class QuoteData {
 	 * @return the random quote
 	 */
 	public String getRandomQuote() {
+		initFormatedQuotes();
 		List<String> valuesList = new ArrayList<String>(quotes.values());
 		int randomIndex = new Random().nextInt(valuesList.size());
 		String randomQuote = valuesList.get(randomIndex);
@@ -59,6 +60,7 @@ public class QuoteData {
 	 * @return the random quote
 	 */
 	public String getRandomQuoteByPlayer(UUID playerUuid) {
+		initFormatedQuotes();
 		List<String> valuesList = new ArrayList<String>();
 		for (Map.Entry<UUID, String> entry : quotes.entrySet()) {
 		    if(entry.getKey() == playerUuid) 
@@ -75,7 +77,11 @@ public class QuoteData {
 	 */
 	public void initFormatedQuotes(){
 		getQuoteConfig();
-		int quoteNumber = config.getInt(TAG + "number");
+		
+		Integer quoteNumber = getQuoteNumber();
+		if(quoteNumber == null) {
+			return;
+		}
 		
 		String quote = null;
 		String quoteMessage = null;
@@ -96,9 +102,9 @@ public class QuoteData {
 	 * Get the number of existing quotes
 	 * @return the quote number
 	 */
-	public int getQuoteNumber() {
+	public Integer getQuoteNumber() {
 		getQuoteConfig();
-		int quoteNumber = config.getInt(TAG + "number");
+		Integer quoteNumber = config.getInt(TAG + "number");
 		return quoteNumber;
 	}
 	
@@ -123,9 +129,17 @@ public class QuoteData {
 	 */
 	public void setQuote(String playerUuid, String message, String date) {
 		getQuoteConfig();
-		int quoteNumber = getQuoteNumber();
+		
+		Integer quoteNumber = getQuoteNumber();
+		
+		if(quoteNumber == null) {
+			quoteNumber = 1;
+		}
+
 		quoteNumber++;
+		
 		try {
+			
 			config.set(TAG + "quote-" + quoteNumber + ".message", message);
 			config.set(TAG + "quote-" + quoteNumber + ".player", playerUuid);
 			config.set(TAG + "quote-" + quoteNumber + ".date", date);
@@ -150,6 +164,14 @@ public class QuoteData {
 			if(quote.equalsIgnoreCase(message)) return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * Check if the quotes hashmap is empty
+	 * @return true or false
+	 */
+	public boolean isQuoteEmpty() {
+		return quotes.isEmpty();
 	}
 	
 }

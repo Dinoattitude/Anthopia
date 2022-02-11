@@ -2,6 +2,7 @@ package fr.dinoattitude.anthopia.commands;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -28,11 +29,18 @@ public class QuoteCommand implements CommandExecutor{
 			String date = getDate();
 			
 			Player playerCible = Bukkit.getPlayer(playerName);
+			
+			if(playerCible == null) {
+				player.sendMessage("§8[§l§cAnthopia§r§8] §cLe joueur " + playerName + " est introuvable");
+				return true;
+			}
+			
+			UUID playerCibleUUID = playerCible.getUniqueId();
 			String quote = getQuote(playerCible);
 			
 			/* Quote checks */
 			boolean verifQuote = quoteData.isNewQuote(quote);
-			if(verifQuote == true) {
+			if(!verifQuote) {
 				player.sendMessage("§8[§l§cAnthopia§r§8] §cVous ne pouvez pas /quote un message déjà /quote.");
 				return true;
 			}
@@ -42,15 +50,16 @@ public class QuoteCommand implements CommandExecutor{
 				return true;
 			}
 			
-			if(playerCible == null) {
-				player.sendMessage("§8[§l§cAnthopia§r§8] §cLe joueur " + playerName + " est introuvable");
-				return true;
-			}
-
-			quoteData.setQuote(playerName, quote, date);
+			quoteData.setQuote(playerCibleUUID.toString(), quote, date);
 			Bukkit.broadcastMessage("§b" + playerName + " a été quote par §9" + player.getName());
 		}
 		else if(args.length == 2) {
+			
+			/*if(quoteData.isQuoteEmpty()) {
+				player.sendMessage(Messages.NO_QUOTES.toString());
+				return true;
+			}*/
+			
 			if(args[0].equalsIgnoreCase("de")) {
 				String playerName = args[1];
 				Bukkit.broadcastMessage("§9" + player.getName() + " demande une quote de " + playerName + " :");
@@ -61,6 +70,13 @@ public class QuoteCommand implements CommandExecutor{
 			}
 		}
 		else {
+			
+			/*
+			if(quoteData.isQuoteEmpty()) {
+				player.sendMessage(Messages.NO_QUOTES.toString());
+				return true;
+			}*/
+			
 			Bukkit.broadcastMessage("§9" + player.getName() + " demande une quote :");
 			Bukkit.broadcastMessage(quoteData.getRandomQuote());
 			

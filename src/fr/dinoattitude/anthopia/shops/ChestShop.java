@@ -42,6 +42,7 @@ public class ChestShop implements Listener{
 	
 	@EventHandler
 	public void onClic(PlayerInteractEvent event) {
+		
 		Player player = event.getPlayer();
 		ItemStack stick = new ItemStack(Material.STICK, 1);
 		
@@ -49,7 +50,7 @@ public class ChestShop implements Listener{
 		//If want to open the shop :
 		if(player.getInventory().getItemInMainHand().equals(stick) && (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.CHEST)) {
 			event.setCancelled(true); //Cancelling the event
-
+			
 			world = player.getWorld();
 			
 			//Gets the location of the shop
@@ -87,7 +88,7 @@ public class ChestShop implements Listener{
 		//If want to destroy the shop :
 		else if(player.getInventory().getItemInMainHand().equals(stick) && (event.getAction() == Action.LEFT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.CHEST)) {
 			event.setCancelled(true);
-			
+
 			world = player.getWorld();
 			
 			chestLocX = (int)event.getClickedBlock().getX();
@@ -101,7 +102,7 @@ public class ChestShop implements Listener{
 			}
 			else
 				player.sendMessage("§cVous ne pouvez pas détruire un shop qui ne vous appratient pas !");
-			
+
 		}
 	}
 }

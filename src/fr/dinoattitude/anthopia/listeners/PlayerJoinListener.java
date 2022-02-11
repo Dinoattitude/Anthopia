@@ -20,6 +20,7 @@ import fr.dinoattitude.anthopia.bourse.economy_api.EconomyData;
 import fr.dinoattitude.anthopia.utils.PlayerData;
 import fr.dinoattitude.anthopia.utils.Rank;
 import fr.dinoattitude.anthopia.utils.TeamsTagsManager;
+import fr.dinoattitude.anthopia.utils.Utilities;
 
 public class PlayerJoinListener implements Listener {
 	
@@ -128,6 +129,9 @@ public class PlayerJoinListener implements Listener {
 		/* Tablist Runnable */
 		new BukkitRunnable()
 		{
+			
+			long exceptionAmount = 0;
+			
 		    @Override
 		    public void run()
 		    {
@@ -136,26 +140,38 @@ public class PlayerJoinListener implements Listener {
 					cancel();
 				}
 		    	
-		    	PlayerData playerData = new PlayerData(player.getUniqueId());
-				Double balance = EconomyData.getBalance(player.getUniqueId());
-				Integer tempAmount = balance.intValue();
-				String amount = tempAmount.toString();
-				
-				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-				String texte_date = sdf.format(new Date());
-				
-				setTablist(player, "§b§lBienvenue sur Anthopia\n"
-				+ " \n"
-				+ "§aPing: §2§n" + String.valueOf(player.getPing()) + "§r§a ms\n"
-				+ "§6§l" + amount + "§r§6 euros\n"
-				+ "§3-------------------", 
-				"§3-------------------\n" 
-				+ "§7Heure §3[§b" + texte_date + "§3]\n"
-				+ " \n"
-				+ "§2Adresse: §amc.anthopia.net\n"
-				+ "§ehttps://discord.gg/CDPXnxq");
-				TeamsTagsManager.setNameTag(player, Rank.powerToRank(playerData.getRank()).getOrderRank(), Rank.powerToRank(playerData.getRank()).getDisplayName()+" ", "");
-				
+		    	try {
+					
+		    		PlayerData playerData = new PlayerData(player.getUniqueId());
+					Double balance = EconomyData.getBalance(player.getUniqueId());
+					
+					if(balance == null) {
+						EconomyData.loadPlayerEconomy(playerUUID);
+					}
+					
+					Integer tempAmount = balance.intValue();
+					String amount = tempAmount.toString();
+					
+					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+					String texte_date = sdf.format(new Date());
+					
+					setTablist(player, "§b§lBienvenue sur Anthopia\n"
+					+ " \n"
+					+ "§aPing: §2§n" + String.valueOf(player.getPing()) + "§r§a ms\n"
+					+ "§6§l" + amount + "§r§6 euros\n"
+					+ "§3-------------------", 
+					"§3-------------------\n" 
+					+ "§7Heure §3[§b" + texte_date + "§3]\n"
+					+ " \n"
+					+ "§2Adresse: §amc.anthopia.net\n"
+					+ "§ehttps://discord.gg/CDPXnxq");
+					TeamsTagsManager.setNameTag(player, Rank.powerToRank(playerData.getRank()).getOrderRank(), Rank.powerToRank(playerData.getRank()).getDisplayName()+" ", "");
+		    		
+				} catch (Exception e) {
+					Utilities.customPlayerExceptionLogger(e, player, this.getClass().getSimpleName(), exceptionAmount);
+					exceptionAmount++;
+				}
+
 		    }
 		}.runTaskTimer(Main.getInstance(), 0L, 5 * 20L);
 		
@@ -164,22 +180,36 @@ public class PlayerJoinListener implements Listener {
 		   C'est une syncro avec l'économie de Vault pour ne pas avoir de différence entre les deux économies */
 		new BukkitRunnable()
 		{
+			long exceptionAmount = 0;
+			
 			@Override
 		    public void run()
 		    {
-		    	
+
 		    	if(!player.isOnline()) {
 					cancel();
 				}
-
-				final Double VAULT_BALANCE = Main.getEconomy().getBalance(player);
-				final Double INTERN_BALANCE = EconomyData.getBalance(playerUUID);
-				
-				if(VAULT_BALANCE < INTERN_BALANCE) {
-					return;
+		    	
+		    	try {
+		    		
+		    		final Double VAULT_BALANCE = Main.getEconomy().getBalance(player);
+					final Double INTERN_BALANCE = EconomyData.getBalance(playerUUID);
+					
+					if(INTERN_BALANCE == null) {
+						EconomyData.loadPlayerEconomy(playerUUID);
+					}
+					
+					if(VAULT_BALANCE < INTERN_BALANCE) {
+						return;
+					}
+					
+					EconomyData.setBalance(playerUUID, VAULT_BALANCE);
+					
+				} catch (Exception e) {		
+					Utilities.customPlayerExceptionLogger(e, player, this.getClass().getSimpleName(), exceptionAmount);
+					exceptionAmount++;
 				}
 				
-				EconomyData.setBalance(playerUUID, VAULT_BALANCE);
 		    }
 		}.runTaskTimer(Main.getInstance(), 60 * 20L, 60 * 20L);
 

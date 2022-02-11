@@ -12,6 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import fr.dinoattitude.anthopia.Main;
+
 //import net.minecraft.server.v1_16_R2.EntityPlayer;
 
 /** Contains various useful functions all over the plugin
@@ -97,4 +99,30 @@ public class Utilities {
 		return it;
 	}
 	
+	/** Log and print exception's infos to the console
+	 * @param exception The throwed exception 
+	 * @param player The player involved
+	 * @param className The class name where the exception comes from
+	 */
+	public static void customPlayerExceptionLogger(Exception exception, Player player, String className, long exceptionAmount) {
+		
+		if (exceptionAmount > 4)  {
+			return;
+		}
+		
+		if (exceptionAmount > 3)  {
+			Main.setInfoLog(" [Antilag] Too many exceptions : disabling log messages for player " + player.getName());
+			return;
+		}
+		
+		Main.setSevereLog(
+				className 
+				+ ": " + exception.getCause() + ": "
+				+ "Name [" + player.getName() +"] , "
+				+ "UUID [" + player.getUniqueId() + "] , "
+				+ "Online [" + player.isOnline() + "]"
+		);
+		exception.printStackTrace();
+
+	}
 }

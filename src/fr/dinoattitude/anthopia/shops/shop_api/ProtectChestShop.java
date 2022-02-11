@@ -154,6 +154,7 @@ public class ProtectChestShop implements Listener{
 	public void itemVanish(ItemDespawnEvent event) {
 		ItemStack iDespawn = event.getEntity().getItemStack();
 		if(iDespawn == null) return;
+		if(iDespawn.getItemMeta() == null) return;
 		if(iDespawn.getItemMeta().getLore() == null) return;
 		if(iDespawn.getItemMeta().getLore().contains("FLOATING")) {
 			event.setCancelled(true);
@@ -164,6 +165,7 @@ public class ProtectChestShop implements Listener{
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void itemPickup(EntityPickupItemEvent event) {
 		if(event.getItem().getItemStack() == null) return;
+		if(event.getItem().getItemStack().getItemMeta() == null) return;
 		if(event.getItem().getItemStack().getItemMeta().getLore() == null) return;
 		if(event.getItem().getItemStack().getItemMeta().getLore().contains("FLOATING")) {
 			event.setCancelled(true);
