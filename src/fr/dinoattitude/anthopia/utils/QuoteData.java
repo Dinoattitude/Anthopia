@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.UUID;
 
@@ -20,7 +20,8 @@ public class QuoteData {
 	private final String FILE_FOLDER_NAME = "Quotes"; 
 	private final String TAG = "Quotes.";
 	
-	private HashMap<UUID,String> quotes = new HashMap<UUID,String>();
+	private List<String> quotesListOfAllPlayers = new ArrayList<String>();
+	private static HashMap<UUID, List<String>> quotes = new HashMap<UUID, List<String>>();
 
 	
 	public final FileConfiguration getQuoteConfig() {
@@ -41,6 +42,19 @@ public class QuoteData {
 		config = YamlConfiguration.loadConfiguration(file);
 	}
 	
+	public void addQuoteToList(String quote) {
+		this.quotesListOfAllPlayers.add(quote);
+	}
+	
+	public List<String> getQuoteList() {
+		return this.quotesListOfAllPlayers;
+	}
+	
+	public void addQuoteToHashmapList(UUID uuid, String quote) {
+		List<String> quoteList = quotes.get(uuid) == null ? new ArrayList<String>() : quotes.get(uuid);
+		quoteList.add(quote);
+		quotes.put(uuid, quoteList);
+	}
 	
 	/** 
 	 * Get a random quote 
@@ -48,9 +62,9 @@ public class QuoteData {
 	 */
 	public String getRandomQuote() {
 		initFormatedQuotes();
-		List<String> valuesList = new ArrayList<String>(quotes.values());
-		int randomIndex = new Random().nextInt(valuesList.size());
-		String randomQuote = valuesList.get(randomIndex);
+		List<String> listValues = getQuoteList();
+		int randomIndex = new Random().nextInt(listValues.size());
+		String randomQuote = listValues.get(randomIndex);
 		return randomQuote;
 	}
 	
@@ -62,9 +76,13 @@ public class QuoteData {
 	public String getRandomQuoteByPlayer(UUID playerUuid) {
 		initFormatedQuotes();
 		List<String> valuesList = new ArrayList<String>();
-		for (Map.Entry<UUID, String> entry : quotes.entrySet()) {
-		    if(entry.getKey() == playerUuid) 
-		    	valuesList.add(entry.getValue());
+		for (Entry<UUID, List<String>> entry : quotes.entrySet()) {
+		    if(entry.getKey() == playerUuid) {
+		    	for (String quote : entry.getValue()) {
+		    		valuesList.add(quote);
+				}
+		    }
+		    	
 		}
 		
 		int randomIndex = new Random().nextInt(valuesList.size());
@@ -94,7 +112,8 @@ public class QuoteData {
 			quoteDate = config.getString(TAG + "quote-" + i + ".date");
 
 			quote = "§3Le " + quoteDate + " par §9" + Bukkit.getOfflinePlayer(UUID.fromString(quotePlayer)).getName() + "§7: §f" + quoteMessage;
-			quotes.put(UUID.fromString(quotePlayer), quote);
+			addQuoteToList(quote);
+			addQuoteToHashmapList(UUID.fromString(quotePlayer), quote);
 		}
 	}
 	
@@ -145,7 +164,7 @@ public class QuoteData {
 			config.set(TAG + "quote-" + quoteNumber + ".date", date);
 			config.save(file);
 			
-			quotes.put(UUID.fromString(playerUuid), message);
+			addQuoteToHashmapList(UUID.fromString(playerUuid), message);
 			setQuoteNumber(quoteNumber);
 			
 		} catch (IOException e) {
@@ -159,7 +178,7 @@ public class QuoteData {
 	 * @return false / true
 	 */
 	public boolean isNewQuote(String message) {
-		List<String> valuesList = new ArrayList<String>(quotes.values());
+		List<String> valuesList = getQuoteList();
 		for(String quote : valuesList) {
 			if(quote.equalsIgnoreCase(message)) return false;
 		}

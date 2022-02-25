@@ -43,6 +43,7 @@ public class SalaryAttr {
 			if(level < salary.getLevel()) {
 				compensationBonus = Double.valueOf(salary.getCompensationAmount());
 				salaryBonus = Double.valueOf(salary.getSalaryAmount());
+				break;
 			}
 		}
 	}

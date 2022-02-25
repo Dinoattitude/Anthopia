@@ -181,6 +181,8 @@ public class PlayerJoinListener implements Listener {
 		new BukkitRunnable()
 		{
 			long exceptionAmount = 0;
+			Double temporaryVaultBalance = Main.getEconomy().getBalance(player),
+			temporaryInternBalance = EconomyData.getBalance(playerUUID);
 			
 			@Override
 		    public void run()
@@ -199,9 +201,22 @@ public class PlayerJoinListener implements Listener {
 						EconomyData.loadPlayerEconomy(playerUUID);
 					}
 					
-					if(VAULT_BALANCE > INTERN_BALANCE) {
-						return;
-					}
+					if(VAULT_BALANCE == INTERN_BALANCE) {
+			            return;
+			        }
+
+			        if(temporaryVaultBalance != VAULT_BALANCE) {
+			            EconomyData.setBalance(playerUUID, VAULT_BALANCE);
+			            return;
+			        }
+
+			        if(temporaryInternBalance != INTERN_BALANCE) {
+			            EconomyData.setBalance(playerUUID, INTERN_BALANCE);
+			            return;
+			        }
+					
+					temporaryVaultBalance = Main.getEconomy().getBalance(player);
+			        temporaryInternBalance = EconomyData.getBalance(playerUUID);
 					
 					EconomyData.setBalance(playerUUID, VAULT_BALANCE);
 					
@@ -211,7 +226,7 @@ public class PlayerJoinListener implements Listener {
 				}
 				
 		    }
-		}.runTaskTimer(Main.getInstance(), 60 * 20L, 60 * 20L);
+		}.runTaskTimer(Main.getInstance(), 20L, 60 * 20L);
 
 	}
 	

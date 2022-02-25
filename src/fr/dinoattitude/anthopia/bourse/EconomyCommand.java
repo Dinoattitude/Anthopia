@@ -62,7 +62,11 @@ public class EconomyCommand implements CommandExecutor{
 			}
 		}
 		else if(args[0].equalsIgnoreCase("deposit") || args[0].equalsIgnoreCase("retire")) {
-			if(sender.hasPermission("anthopia.player") || sender.hasPermission("anthopia.moderation.eco")) {
+			
+			player.sendMessage(Messages.DISABLE_CMD.toString());
+			return true;
+			
+			/*if(sender.hasPermission("anthopia.player") || sender.hasPermission("anthopia.moderation.eco")) {
 				if(args.length != 2) sender.sendMessage(Messages.INCOMPLETE_COMMAND.toString() + "/money deposit/retire <amount>");
 				else {
 					double amount = 0;
@@ -91,9 +95,9 @@ public class EconomyCommand implements CommandExecutor{
 					else
 						sender.sendMessage(Messages.NOT_ENOUGH_MONEY.toString());
 				}
-			}
+			} */
 		}
-		else
+		else 
 			sender.sendMessage("§8[§l§cAnthopia§r§8] §cVous n'avez pas la permission ou cette commande n'existe pas -> /help");
 		
 		return true;
