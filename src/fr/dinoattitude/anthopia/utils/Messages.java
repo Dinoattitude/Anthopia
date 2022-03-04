@@ -26,7 +26,9 @@ public enum Messages {
 	DISABLE_CMD("disable_name", "§cCette commande est désactivé temporairement."),
 	TEST("test", "§eCeci est un test de fonctionnement des messages."),
 	NOT_ENOUGH_PLACE("not_enough_place", "§cVous n'avez pas assez de place dans votre inventaire."),
-	NO_QUOTES("no-quotes", "§cAucune quote n'est enregistrée pour le moment.");
+	NO_QUOTES("no-quotes", "§cAucune quote n'est enregistrée pour le moment."),
+	INVALID_BUILDING_SHOP_LOCATION("invalid-building-shop-location", "§cVous ne pouvez pas construire un shop ici."),
+	CANT_DESTROY_OTHERS_SHOPS("cant-destroy-others-shops", "§cVous ne pouvez pas détruire un shop qui ne vous appartient pas.");
 	
     private String path;
     private String def;

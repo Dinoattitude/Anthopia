@@ -29,7 +29,7 @@ public class ShopInventoryListener implements Listener{
 	CHANGE_ITEM_SHOP_NAME = ATH_SHOP_HEADER + "Change item ?",
 	MODIFICATION_SHOP_NAME = ATH_SHOP_HEADER + "Modification",
 	DELETE_SHOP_NAME = ATH_SHOP_HEADER + "Supprimer ?";
-
+	
 	public ItemStack currentItem;
 	public String playerUUID;
 	public int shopStock;
@@ -37,10 +37,11 @@ public class ShopInventoryListener implements Listener{
 
 	@EventHandler
 	public void onClick(InventoryClickEvent event) {
-
+		
 		Player player = (Player) event.getWhoClicked();
 		currentItem = event.getCurrentItem();
-		ShopInfo shopInfo = new ShopInfo(player, player.getWorld(), ChestShop.getChestLocX(), ChestShop.getChestLocY(), ChestShop.getChestLocZ());
+		
+		ShopInfo shopInfo = ShopInteractionListener.getClickedShopInfo();
 
 		playerUUID = shopInfo.getPlayer().getUniqueId().toString();
 		shopStock = shopInfo.getStock(playerUUID);
@@ -94,7 +95,7 @@ public class ShopInventoryListener implements Listener{
 
 			}
 
-			shopInfo.createShop(ChestShop.getCarpet(), pi.get(1));
+			shopInfo.createShop(ShopInteractionListener.getCarpet(), pi.get(1));
 			pi.clear();
 			player.closeInventory();
 			return;
@@ -188,7 +189,7 @@ public class ShopInventoryListener implements Listener{
 
 		}
 	}
-
+	
 	public boolean isNammedShop(InventoryClickEvent event, String shopName) {
 	   return event.getView().getTitle().equalsIgnoreCase(shopName);
 	}

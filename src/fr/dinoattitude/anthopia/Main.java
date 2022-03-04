@@ -16,7 +16,6 @@ import biz.princeps.landlord.api.ILandLord;
 import fr.dinoattitude.anthopia.bourse.EconomyCommand;
 import fr.dinoattitude.anthopia.bourse.SalaryAttr;
 import fr.dinoattitude.anthopia.bourse.economy_api.BourseData;
-//import fr.dinoattitude.anthopia.bourse.economy_api.EconomyData;
 import fr.dinoattitude.anthopia.bourse.listeners.BlocksListener;
 import fr.dinoattitude.anthopia.bourse.listeners.ClaimListener;
 import fr.dinoattitude.anthopia.commands.CacCommand;
@@ -42,7 +41,7 @@ import fr.dinoattitude.anthopia.utils.Messages;
 import fr.dinoattitude.anthopia.utils.QuoteData;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
-import fr.dinoattitude.anthopia.shops.ChestShop;
+import fr.dinoattitude.anthopia.shops.ShopInteractionListener;
 import fr.dinoattitude.anthopia.shops.ShopInventoryListener;
 import fr.dinoattitude.anthopia.shops.shop_api.ProtectChestShop;
 
@@ -90,7 +89,7 @@ public class Main extends JavaPlugin{
 		pm.registerEvents(new PlayerJoinListener(), this);
 		pm.registerEvents(new PlayerChatListener(), this);
 		pm.registerEvents(new PlayerDeathListener(), this);
-		pm.registerEvents(new ChestShop(), this);
+		pm.registerEvents(new ShopInteractionListener(), this);
 		pm.registerEvents(new ShopInventoryListener(), this);
 		pm.registerEvents(new ProtectChestShop(), this);
 
