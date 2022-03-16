@@ -8,6 +8,5 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/adrie/Desktop/Bureau 2.0/Programmation/Anthopia/Utilities/1.18.1/Vault.jar"/>
 	<classpathentry kind="lib" path="C:/Users/adrie/Desktop/Bureau 2.0/Programmation/Anthopia/Utilities/1.18.1/spigot-api-1.18.1-R0.1-SNAPSHOT-shaded.jar"/>
-	<classpathentry kind="lib" path="C:/Users/adrie/Desktop/Bureau 2.0/Programmation/Anthopia/Utilities/1.18.1/landlord-latest-4.360.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

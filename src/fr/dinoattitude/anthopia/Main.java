@@ -12,12 +12,10 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import biz.princeps.landlord.api.ILandLord;
 import fr.dinoattitude.anthopia.bourse.EconomyCommand;
 import fr.dinoattitude.anthopia.bourse.SalaryAttr;
 import fr.dinoattitude.anthopia.bourse.economy_api.BourseData;
 import fr.dinoattitude.anthopia.bourse.listeners.BlocksListener;
-import fr.dinoattitude.anthopia.bourse.listeners.ClaimListener;
 import fr.dinoattitude.anthopia.commands.CacCommand;
 import fr.dinoattitude.anthopia.commands.CoordsCommand;
 import fr.dinoattitude.anthopia.commands.DiscordCommand;
@@ -37,20 +35,18 @@ import fr.dinoattitude.anthopia.guild.GuildListener;
 import fr.dinoattitude.anthopia.listeners.PlayerChatListener;
 import fr.dinoattitude.anthopia.listeners.PlayerDeathListener;
 import fr.dinoattitude.anthopia.listeners.PlayerJoinListener;
+import fr.dinoattitude.anthopia.shops.listeners.ShopInteractionListener;
+import fr.dinoattitude.anthopia.shops.listeners.ShopInventoryListener;
+import fr.dinoattitude.anthopia.shops.listeners.ShopProtectionListener;
 import fr.dinoattitude.anthopia.utils.Messages;
 import fr.dinoattitude.anthopia.utils.QuoteData;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
-import fr.dinoattitude.anthopia.shops.ShopInteractionListener;
-import fr.dinoattitude.anthopia.shops.ShopInventoryListener;
-import fr.dinoattitude.anthopia.shops.shop_api.ProtectChestShop;
 
 public class Main extends JavaPlugin{
 
-	public static Main INSTANCE;
+	public static Main INSTANCE;	
 
-	@SuppressWarnings("unused")
-	private ILandLord llAPI;
 	private static Logger log;
 	
 	private static Economy economy = null;
@@ -70,7 +66,6 @@ public class Main extends JavaPlugin{
 
 		//Controls before runnable
 		checkVaultApi();
-		checkLandLordApi();
 		loadLang();
 		
 		//Bourse
@@ -84,14 +79,13 @@ public class Main extends JavaPlugin{
 		//PluginManager registering events
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new BlocksListener(), this);
-		pm.registerEvents(new ClaimListener(), this);
 		pm.registerEvents(new GuildListener(), this);
 		pm.registerEvents(new PlayerJoinListener(), this);
 		pm.registerEvents(new PlayerChatListener(), this);
 		pm.registerEvents(new PlayerDeathListener(), this);
 		pm.registerEvents(new ShopInteractionListener(), this);
 		pm.registerEvents(new ShopInventoryListener(), this);
-		pm.registerEvents(new ProtectChestShop(), this);
+		pm.registerEvents(new ShopProtectionListener(), this);
 
 		//Setting executors to commands
 		this.getCommand("money").setExecutor(new EconomyCommand());
@@ -141,20 +135,6 @@ public class Main extends JavaPlugin{
 	//Gets the main instance for runnable for example
 	public static Main getInstance() {
 		return INSTANCE;
-	}
-
-	// +------------------------------------------------------+
-	// |                      Landlord                        |
-	// +------------------------------------------------------+
-
-	//Check if landlord is working
-	public void checkLandLordApi() {
-		try {
-            this.llAPI = (ILandLord) getServer().getPluginManager().getPlugin("Landlord");
-        } catch (NoClassDefFoundError ex) {
-        	setWarningLog("Landlord missing!");
-            return;
-        }
 	}
 
 	// +------------------------------------------------------+
@@ -216,6 +196,7 @@ public class Main extends JavaPlugin{
 	                YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(lang);
 	                defConfig.save(lang);
 	                Messages.setFile(defConfig);
+	                defConfigStream.close();
 	            }
 	        } catch(IOException e) {
 	            e.printStackTrace();

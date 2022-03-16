@@ -1,4 +1,4 @@
-package fr.dinoattitude.anthopia.shops.shop_api;
+package fr.dinoattitude.anthopia.shops.listeners;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +28,7 @@ import org.bukkit.inventory.ItemStack;
  * @author Dinoattitude
  * @version 2.3.6
 */
-public class ProtectChestShop implements Listener{
+public class ShopProtectionListener implements Listener{
 	
 	//Toutes les méthodes accèdent au fichier général du shop
 	//Sauf: Méthodes avec events

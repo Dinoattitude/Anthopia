@@ -1,4 +1,6 @@
-package fr.dinoattitude.anthopia.shops;
+package fr.dinoattitude.anthopia.shops.listeners;
+
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -10,31 +12,29 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import fr.dinoattitude.anthopia.shops.shop_api.ShopInfo;
+import fr.dinoattitude.anthopia.shops.shop_api.ShopData;
+import fr.dinoattitude.anthopia.shops.shop_gui.GUI_ShopCreation;
+import fr.dinoattitude.anthopia.shops.shop_gui.GUI_ShopCustomer;
+import fr.dinoattitude.anthopia.shops.shop_gui.GUI_ShopDeletion;
+import fr.dinoattitude.anthopia.shops.shop_gui.GUI_ShopOwner;
 import fr.dinoattitude.anthopia.utils.Messages;
 
+/** Interaction listener to start the shops use.
+ * @author Dinoattitude
+ * @since 2.4.3
+ * @version 3.4.3
+*/
 public class ShopInteractionListener implements Listener {
 
 	private final ItemStack TRIGGER_ITEMSTACK = new ItemStack(Material.STICK, 1);
 	private final Material REQUIRED_UNDERSHOP_BLOCK = Material.QUARTZ_BLOCK;
 	private final Material REQUIRED_CARPET_MATERIAL = Material.WHITE_CARPET;
-	
-	private World currentWorld = null;
-	private static Location carpet = null;
-	private static ShopInfo shopInfo = null;
 
-	public static Location getCarpet() {
-		return carpet;
-	}
-	
-	public static ShopInfo getClickedShopInfo() {
-		return shopInfo;
-	}
-	
 	@EventHandler
 	public void onClic(PlayerInteractEvent event) {
 		
 		Player player = event.getPlayer();
+		UUID playerUUID = player.getUniqueId();
 		
 		if(event.getClickedBlock() == null) {
 			return;
@@ -47,28 +47,33 @@ public class ShopInteractionListener implements Listener {
 		if(!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.LEFT_CLICK_BLOCK))) {
 			return;
 		}
-		
-		currentWorld = player.getWorld();
+
+		World currentWorld = player.getWorld();
 		
 		int chestLocX = (int) event.getClickedBlock().getX();
 		int chestLocY = (int) event.getClickedBlock().getY();
 		int chestLocZ = (int) event.getClickedBlock().getZ();
 		
-		shopInfo = new ShopInfo(player, currentWorld, chestLocX, chestLocY, chestLocZ);
+		ShopData shopData = new ShopData(currentWorld, chestLocX, chestLocY, chestLocZ);
 		
 		if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			event.setCancelled(true);
 			
-			carpet = new Location(currentWorld, chestLocX, (chestLocY + 1), chestLocZ);
+			Location carpet = new Location(currentWorld, chestLocX, (chestLocY + 1), chestLocZ);
 			
 			if(carpet.getBlock().getType().equals(REQUIRED_CARPET_MATERIAL)) {
-				if(!shopInfo.isShopOwner()) { 
-					shopInfo.getCustomerShop(shopInfo.getShopOwner());
+				if(!shopData.isShopOwner(playerUUID)) { 
+					
+					GUI_ShopCustomer gui = new GUI_ShopCustomer(shopData);
+				    player.openInventory(gui.getInventory());
+					
 					event.setCancelled(true);
 					return;
 				}
 				
-				shopInfo.getOwnerShop();
+				GUI_ShopOwner gui = new GUI_ShopOwner(player, shopData);
+			    player.openInventory(gui.getInventory());
+			    
 				event.setCancelled(true);
 				return;
 			}
@@ -76,7 +81,10 @@ public class ShopInteractionListener implements Listener {
 			Location requiredUndershopBlockLocation = new Location(currentWorld, chestLocX, (chestLocY - 1), chestLocZ);
 			
 			if(requiredUndershopBlockLocation.getBlock().getType().equals(REQUIRED_UNDERSHOP_BLOCK)) {
-				shopInfo.inventoryCreateShop();
+				
+				GUI_ShopCreation gui = new GUI_ShopCreation(carpet, shopData);
+			    player.openInventory(gui.getInventory());
+				
 				event.setCancelled(true);
 				return;
 			}
@@ -87,13 +95,15 @@ public class ShopInteractionListener implements Listener {
 		
 		event.setCancelled(true);
 		
-		if(shopInfo.isShopOwner()) { 
-			shopInfo.inventoryDeleteShop();
+		if(shopData.isShopOwner(playerUUID)) { 
+			
+			GUI_ShopDeletion gui = new GUI_ShopDeletion(shopData);
+		    player.openInventory(gui.getInventory());
+			
 			event.setCancelled(true);
 			return;
 		}
 		
 		player.sendMessage(Messages.CANT_DESTROY_OTHERS_SHOPS.toString());
-		
 	}
 }
