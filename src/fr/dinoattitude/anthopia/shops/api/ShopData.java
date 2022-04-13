@@ -1,4 +1,4 @@
-package fr.dinoattitude.anthopia.shops.shop_api;
+package fr.dinoattitude.anthopia.shops.api;
 
 import java.io.File;
 import java.io.IOException;

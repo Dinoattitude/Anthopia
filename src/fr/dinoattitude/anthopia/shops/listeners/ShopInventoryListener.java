@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-import fr.dinoattitude.anthopia.shops.shop_gui.IGUI_Inventory;
+import fr.dinoattitude.anthopia.shops.gui.IGUI_Inventory;
 
 /** Click listener for interactions within shops GUI.
  * @author Dinoattitude
@@ -18,12 +18,12 @@ public class ShopInventoryListener implements Listener {
 	@EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
 		
-		if(event.isShiftClick() || event.getClick() == ClickType.DOUBLE_CLICK) {
-			event.setCancelled(true);
-			return;
-		}
-		
         if(event.getInventory().getHolder() instanceof IGUI_Inventory) {
+        	
+        	if(event.isShiftClick() || event.getClick() == ClickType.DOUBLE_CLICK) {
+    			event.setCancelled(true);
+    			return;
+    		}
         	
         	event.setCancelled(true);
         	

@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
-import fr.dinoattitude.anthopia.shops.shop_api.ShopData;
+import fr.dinoattitude.anthopia.shops.api.ShopData;
 
 public class ShopUtils {
 	

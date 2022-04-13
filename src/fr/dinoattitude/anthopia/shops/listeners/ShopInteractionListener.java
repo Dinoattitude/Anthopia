@@ -12,11 +12,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import fr.dinoattitude.anthopia.shops.shop_api.ShopData;
-import fr.dinoattitude.anthopia.shops.shop_gui.GUI_ShopCreation;
-import fr.dinoattitude.anthopia.shops.shop_gui.GUI_ShopCustomer;
-import fr.dinoattitude.anthopia.shops.shop_gui.GUI_ShopDeletion;
-import fr.dinoattitude.anthopia.shops.shop_gui.GUI_ShopOwner;
+import fr.dinoattitude.anthopia.shops.api.ShopData;
+import fr.dinoattitude.anthopia.shops.gui.GUI_ShopCreation;
+import fr.dinoattitude.anthopia.shops.gui.GUI_ShopCustomer;
+import fr.dinoattitude.anthopia.shops.gui.GUI_ShopDeletion;
+import fr.dinoattitude.anthopia.shops.gui.GUI_ShopOwner;
 import fr.dinoattitude.anthopia.utils.Messages;
 
 /** Interaction listener to start the shops use.

@@ -1,4 +1,4 @@
-package fr.dinoattitude.anthopia.shops.shop_gui;
+package fr.dinoattitude.anthopia.shops.gui;
 
 import java.util.UUID;
 
@@ -9,7 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.dinoattitude.anthopia.shops.ShopName;
-import fr.dinoattitude.anthopia.shops.shop_api.ShopData;
+import fr.dinoattitude.anthopia.shops.api.ShopData;
 import fr.dinoattitude.anthopia.utils.Utilities;
 
 /** GUI constructor and action manager for the shop price update .

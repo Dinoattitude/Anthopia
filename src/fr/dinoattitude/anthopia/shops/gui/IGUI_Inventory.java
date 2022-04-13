@@ -1,4 +1,4 @@
-package fr.dinoattitude.anthopia.shops.shop_gui;
+package fr.dinoattitude.anthopia.shops.gui;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;

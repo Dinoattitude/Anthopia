@@ -1,4 +1,4 @@
-package fr.dinoattitude.anthopia.shops.shop_gui;
+package fr.dinoattitude.anthopia.shops.gui;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.dinoattitude.anthopia.shops.ShopName;
 import fr.dinoattitude.anthopia.shops.ShopUtils;
-import fr.dinoattitude.anthopia.shops.shop_api.ShopData;
+import fr.dinoattitude.anthopia.shops.api.ShopData;
 import fr.dinoattitude.anthopia.utils.Messages;
 import fr.dinoattitude.anthopia.utils.Utilities;
 
