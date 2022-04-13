@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 /** GUI Interface for easily launching multiples instances of GUI inventories.
  * @author Dinoattitude
- * @since 3.4.3
- * @version 3.4.3
+ * @since 2.4.3
+ * @version 2.4.3
 */
 public interface IGUI_Inventory extends InventoryHolder {
 	

@@ -13,8 +13,8 @@ import fr.dinoattitude.anthopia.shops.api.ShopData;
 
 /** GUI constructor and action manager for the shop item upgrade .
  * @author Dinoattitude
- * @since 3.4.3
- * @version 3.4.3
+ * @since 2.4.3
+ * @version 2.4.3
 */
 public class GUI_ShopItemUpdate implements IGUI_Inventory {
 	

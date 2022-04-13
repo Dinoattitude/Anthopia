@@ -28,7 +28,10 @@ public enum Messages {
 	NOT_ENOUGH_PLACE("not_enough_place", "§cVous n'avez pas assez de place dans votre inventaire."),
 	NO_QUOTES("no-quotes", "§cAucune quote n'est enregistrée pour le moment."),
 	INVALID_BUILDING_SHOP_LOCATION("invalid-building-shop-location", "§cVous ne pouvez pas construire un shop ici."),
-	CANT_DESTROY_OTHERS_SHOPS("cant-destroy-others-shops", "§cVous ne pouvez pas détruire un shop qui ne vous appartient pas.");
+	CANT_DESTROY_OTHERS_SHOPS("cant-destroy-others-shops", "§cVous ne pouvez pas détruire un shop qui ne vous appartient pas."),
+	CANT_SKIPNIGHT("cant-skipnight", "§bYou can't skip the night yet."),
+	SKIPING_NIGHT("skiping-night", "§bVote Passed. Skipping the Night."),
+	VOTE_DENIED("vote-denied", "§bVote Denied.");
 	
     private String path;
     private String def;

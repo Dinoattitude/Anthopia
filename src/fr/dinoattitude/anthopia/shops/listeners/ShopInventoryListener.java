@@ -11,7 +11,7 @@ import fr.dinoattitude.anthopia.shops.gui.IGUI_Inventory;
 /** Click listener for interactions within shops GUI.
  * @author Dinoattitude
  * @since 2.3.6
- * @version 3.4.3
+ * @version 2.4.3
 */
 public class ShopInventoryListener implements Listener {
 	

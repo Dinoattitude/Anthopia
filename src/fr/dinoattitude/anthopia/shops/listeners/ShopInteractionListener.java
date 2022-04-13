@@ -22,7 +22,7 @@ import fr.dinoattitude.anthopia.utils.Messages;
 /** Interaction listener to start the shops use.
  * @author Dinoattitude
  * @since 2.4.3
- * @version 3.4.3
+ * @version 2.4.3
 */
 public class ShopInteractionListener implements Listener {
 

@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 /** Every data related to the physical shop.
  * @author Dinoattitude
  * @since 2.3.6
- * @version 3.4.3
+ * @version 2.4.3
 */
 public class ShopData {
 	

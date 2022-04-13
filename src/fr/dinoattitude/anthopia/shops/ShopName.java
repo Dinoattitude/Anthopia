@@ -1,5 +1,10 @@
 package fr.dinoattitude.anthopia.shops;
 
+/** Enum that stores inventory names.
+ * @author Dinoattitude
+ * @since 2.4.3
+ * @version 2.4.3
+*/
 public enum ShopName {
 	
 	HEADER("§8[§cAnthopia Shop§8] "),

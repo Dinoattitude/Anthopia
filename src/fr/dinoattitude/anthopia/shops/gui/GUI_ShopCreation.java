@@ -15,8 +15,8 @@ import fr.dinoattitude.anthopia.utils.Utilities;
 
 /** GUI constructor and action manager for the shop creation .
  * @author Dinoattitude
- * @since 3.4.3
- * @version 3.4.3
+ * @since 2.4.3
+ * @version 2.4.3
 */
 public class GUI_ShopCreation implements IGUI_Inventory {
 	

@@ -15,6 +15,11 @@ import org.bukkit.util.Vector;
 
 import fr.dinoattitude.anthopia.shops.api.ShopData;
 
+/** Shop utilities functions .
+ * @author Dinoattitude
+ * @since 2.4.3
+ * @version 2.4.3
+*/
 public class ShopUtils {
 	
 	private ShopData shopData;

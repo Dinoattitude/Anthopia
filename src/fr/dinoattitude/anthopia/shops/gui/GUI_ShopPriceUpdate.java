@@ -14,8 +14,8 @@ import fr.dinoattitude.anthopia.utils.Utilities;
 
 /** GUI constructor and action manager for the shop price update .
  * @author Dinoattitude
- * @since 3.4.3
- * @version 3.4.3
+ * @since 2.4.3
+ * @version 2.4.3
 */
 public class GUI_ShopPriceUpdate implements IGUI_Inventory {
 	

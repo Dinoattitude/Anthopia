@@ -16,127 +16,140 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.dinoattitude.anthopia.Main;
+import fr.dinoattitude.anthopia.utils.Messages;
 
+/** Vote for skiping the night.
+ * @author Yolowix
+ * @author Dinoattitude
+ * @since 2.3.6
+ * @version 2.4.3
+*/
 public class SkipNightCommand implements CommandExecutor{
-
-	public static HashMap<Integer,String>playerVote=new HashMap <Integer,String>();  //Stock les joueurs ayant fait la commande
 	
+	private static HashMap<Integer,String> playerVote = new HashMap<Integer,String>();
+	private final long SUNSET_TIME = 12000;
+	private final long SUNRISE_TIME = 24000;
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		
-		//récupère joueur
+
 		Player player = (Player) sender;
-		
-		//récupère le monde et l'heure
 		World world = Bukkit.getWorld("world"); //Manuellement pour éviter les votes nether et end
-		long time= world.getTime();
-	
-		int nbPlayers = Bukkit.getOnlinePlayers().size();  //nombre joueur sur le serveur en ligne
 		
-		//Pour les tests
-			//int nbPlayers=5;
-			//playerVote.put(1, "truc");
-			//playerVote.put(2, "test");	
-
-		if(time>12000 && time<24000)  //vérifie l'heure		
-		{
-			int halfPlayers=(Math.round(nbPlayers/2))+1;  //calcul la moitié des joueurs en ligne
-
-			if(nbPlayers>1)  //vérifie le nombre de joueur
-			{	
-				//création de la barre
-				BossBar boss=Bukkit.createBossBar("§b[ SkipNight ]   "+"§fCurrent:  §b"+playerVote.size()+"  §fTo Pass:  §b"+halfPlayers+"  §fRemaining:  §b"+(nbPlayers-playerVote.size()), BarColor.BLUE, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC);
-				
-				if(playerVote.size()==0)  //vérifie si premier skipNight
-				{
-					playerVote.put(playerVote.size()+1, player.getName());  //ajoute le joueur dans la liste
-					
-					Main INSTANCE = Main.getInstance();
-					
-					//affiche la barre pour tout les joueurs 
-					for(Player players : Bukkit.getOnlinePlayers())
-						boss.addPlayer(players);
-					boss.setVisible(true);
-					
-					//création du timer
-					new BukkitRunnable() {
-						double value=1;  //init 
-						@Override
-						public void run()
-						{
-							boss.setTitle("§b[ SkipNight ]   "+"§fCurrent:  §b"+playerVote.size()+"  §fTo Pass:  §b"+halfPlayers+"  §fRemaining:  §b"+(nbPlayers-playerVote.size()));  //actualise les données affichée au dessus de la barre
-								
-							value=value-0.1;  //calcul pour la progression de la barre
-							
-							//convertir value pour le setProgress
-							DecimalFormat df = new DecimalFormat("########.00");
-							String str = df.format(value);
-							value = Double.parseDouble(str.replace(',', '.'));
+		long worldTime = world.getTime();
+		int numberOfOnlinePlayers = Bukkit.getOnlinePlayers().size();
 		
-							boss.setProgress(value);   //init
-		
-							if(playerVote.size()==0)  //Vérifie si liste vide
-							{
-								//fermeture timer, barre et vidange de la liste
-								this.cancel();
-								boss.setVisible(false);
-								playerVote.clear();  //Vidange la liste
-							}
-							if(value==0)  //si barre arrive à 0
-							{
-								//fermeture timer, barre, vidange de la liste et affichage du vote raté
-								this.cancel();
-								boss.setVisible(false);
-								for(Player players : Bukkit.getOnlinePlayers())
-									players.sendMessage("§bVote Denied");
-								playerVote.clear();  //Vidange la liste
-							}
-						}
-					}.runTaskTimer(INSTANCE, 0L, 60L); //60L ->tout les 3sec, action run()
-
-					
-					if(playerVote.size()==0)  //si liste vide, fermé prog
-					{
-						return true;
-					}
-
-				}
-				else
-				{
-					//verifie les doublons de vote et affiche message erreur
-					if(playerVote.containsValue(player.getName()))
-						player.sendMessage("§bYou have already voted");
-					else
-					{
-						playerVote.put(playerVote.size()+1, player.getName()); //add le joueur dans la liste
-
-						if(playerVote.size()==halfPlayers) //verifie si liste egal moitié joueur
-						{
-							//envoie message a tout les joueurs
-							for(Player players : Bukkit.getOnlinePlayers())
-								players.sendMessage("§bVote Passed. Skipping the Night");
-
-							world.setTime(24000);  //Met le jour dans le monde
-							playerVote.clear();  //Vidange la liste
-							return true;
-						}
-					}
-				}
-				
-			}
-			else
-			{
-				world.setTime(24000);  //Met le jour dans le monde
-				//envoie message a tout les joueurs
-				for(Player players : Bukkit.getOnlinePlayers())
-					players.sendMessage("§bVote Passed. Skipping the Night");
-			}
+		if(worldTime < SUNSET_TIME && worldTime > SUNRISE_TIME) {
+			player.sendMessage(Messages.CANT_SKIPNIGHT.toString());
+			return true;
 		}
-		else
-			player.sendMessage("§bYou can't skip the night yet"); //envoie message au joueur
-	
+		
+		int halfOfOnlinePlayers = (Math.round(numberOfOnlinePlayers / 2)) + 1;
+		
+		if(numberOfOnlinePlayers < 1) {
+			endVote(world);
+			
+			return true;
+		}
+		
+		BossBar skipnightHeader = Bukkit.createBossBar("§b[ SkipNight ]   " 
+				+ "§fCurrent:  §b" 
+				+ playerVote.size() 
+				+ "  §fTo Pass:  §b" 
+				+ halfOfOnlinePlayers 
+				+ "  §fRemaining:  §b" 
+				+ (numberOfOnlinePlayers - playerVote.size()), BarColor.BLUE, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC);
+		
+		if(playerVote.size() != 0) {
+			
+			if(playerVote.containsValue(player.getName())) {
+				player.sendMessage("§bYou have already voted");
+				return true;
+			}
+				
+			playerVote.put(playerVote.size() + 1, player.getName());
+			
+			if(playerVote.size() == halfOfOnlinePlayers) {
+				endVote(world);
+				playerVote.clear();
+				return true;
+			}
+			
+			return true;
+		}
+		
+		playerVote.put(playerVote.size() + 1, player.getName());
+		
+		Main INSTANCE = Main.getInstance();
+		
+		for(Player players : Bukkit.getOnlinePlayers()) {
+			skipnightHeader.addPlayer(players);
+		}
+			
+		skipnightHeader.setVisible(true);
+		
+		new BukkitRunnable() {
+			
+			double timer = 1;
 
+			@Override
+			public void run() {
+				
+				setSkipnightHeaderTitle(skipnightHeader, halfOfOnlinePlayers, numberOfOnlinePlayers);
+				
+				timer = timer - 0.1; 
+				
+				//convertit le timer pour le setProgress
+				DecimalFormat df = new DecimalFormat("########.00");
+				String str = df.format(timer);
+				timer = Double.parseDouble(str.replace(',', '.'));
+				
+				skipnightHeader.setProgress(timer);
+				
+				if(playerVote.size() == 0) 
+				{
+					this.cancel();
+					skipnightHeader.setVisible(false);
+					playerVote.clear();
+				}
+				
+				if(timer == 0)
+				{
+					this.cancel();
+					
+					skipnightHeader.setVisible(false);
+					
+					for(Player players : Bukkit.getOnlinePlayers()) {
+						players.sendMessage(Messages.VOTE_DENIED.toString());
+					}
+						
+					playerVote.clear();
+				}
+				
+			}
+			
+		}.runTaskTimer(INSTANCE, 0L, 60L); //60L -> toutes les 3sec
+		
 		return true;
 	}
+	
+	public void endVote(World world) {
 		
+		for(Player players : Bukkit.getOnlinePlayers()) {
+			players.sendMessage(Messages.SKIPING_NIGHT.toString());
+		}
+		
+		world.setTime(SUNRISE_TIME); 
+	}
+	
+	public void setSkipnightHeaderTitle(BossBar skipnightHeader, int halfOfOnlinePlayers, int numberOfOnlinePlayers) {
+		skipnightHeader.setTitle("§b[ SkipNight ]   " 
+				+ "§fCurrent:  §b" 
+				+ playerVote.size() 
+				+ "  §fTo Pass:  §b" 
+				+ halfOfOnlinePlayers 
+				+ "  §fRemaining:  §b" 
+				+ (numberOfOnlinePlayers - playerVote.size()));
+	}
+
 }
