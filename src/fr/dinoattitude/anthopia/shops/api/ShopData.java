@@ -251,7 +251,7 @@ public class ShopData {
 	/** Sets the shop data of a shop.
 	 * @param stock The stock of blocks.
 	 * @param amount The amount of money.
-	 * @param type The type of the block in sale.
+	 * @param item The block in sale.
 	 * @param purchasePrice The unit price for purchase.
 	 * @param sellingPrice The unit price for sale.
 	 */
@@ -298,7 +298,8 @@ public class ShopData {
 	}
 	
 	/** Sets the itemStack sold in the shop.
-	 * @param type The item sold in the shop.
+	 * @param playerUUID The player UUID.
+	 * @param item The item sold in the shop.
 	 */
 	public void setItem(UUID playerUUID, ItemStack item) {
 		try {

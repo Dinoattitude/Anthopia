@@ -80,8 +80,6 @@ public class ShopUtils {
 	}
 	
 	/** Delete the displayed item on the shop.
-	 * @param max The maximum location of the area to check.
-	 * @param min The minimum location of the area to check.
 	*/
 	public void deleteItem() {
 		
@@ -104,7 +102,7 @@ public class ShopUtils {
 	
 	
 	/** Gets the next item witch will be displayed and remove the old one.
-	 * @param blockName The name of the item.
+	 * @param itemMaterial The name of the item.
 	 */
 	public void replaceItem(Material itemMaterial) {
 		
@@ -115,7 +113,7 @@ public class ShopUtils {
 	
 
 	/** Display the new item onto the shop.
-	 * @param blockName the block who will be displayed.
+	 * @param itemMaterial the block who will be displayed.
 	 */
 	public void addDisplayedShopItem(Material itemMaterial) {
 		
@@ -137,7 +135,7 @@ public class ShopUtils {
 	
 	/** Create the shop.
 	 * @param carpet The location of the carpet.
-	 * @param blockName The block name of the block we are selling.
+	 * @param itemStack The block name of the block we are selling.
 	 */
 	public void createShop(Player player, Location carpet, ItemStack itemStack) {
 		
