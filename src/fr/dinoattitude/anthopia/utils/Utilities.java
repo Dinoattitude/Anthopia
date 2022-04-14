@@ -60,7 +60,7 @@ public class Utilities {
 	@SuppressWarnings("deprecation")
 	/** Create a head representing a player
 	 * @param player The player instance
-	 * @param rank The player rank
+	 * @param rank The player rank | null if pseudo only
 	 * @param pseudo The player name
 	 * @return A head representing a player
 	 */
@@ -77,7 +77,14 @@ public class Utilities {
 		
 		SkullMeta skullm = (SkullMeta) skull.getItemMeta();
 		skullm.setOwningPlayer(player);
-		skullm.setDisplayName("§3" + pseudo + " : §5" + rank);
+		
+		if(rank == null) {
+			skullm.setDisplayName(pseudo);
+		}
+		else {
+			skullm.setDisplayName("§3" + pseudo + " : §5" + rank);
+		}
+		
 		skull.setItemMeta(skullm);
 		return skull;
 	}

@@ -188,21 +188,32 @@ public class Main extends JavaPlugin{
 	public void loadLang() {
 	    File lang = new File(getDataFolder(), "lang.yml");
 	    if (!lang.exists()) {
+	    	InputStream defConfigStream = null;
 	        try {
 	            getDataFolder().mkdir();
 	            lang.createNewFile();
-	            InputStream defConfigStream = this.getResource("lang.yml");
+	            defConfigStream = this.getResource("lang.yml");
 	            if (defConfigStream != null) {
 	                YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(lang);
 	                defConfig.save(lang);
 	                Messages.setFile(defConfig);
-	                defConfigStream.close();
 	            }
 	        } catch(IOException e) {
 	            e.printStackTrace();
 	            setSevereLog("Couldn't create language file.");
 	            setSevereLog("This is a fatal error. Now disabling");
 	            this.setEnabled(false);
+	        } finally {
+	        	if(defConfigStream != null) {
+	        		try {
+						defConfigStream.close();
+					} catch (IOException e) {
+						setSevereLog("Couldn't close the stream.");
+			            setSevereLog("This is a fatal error. Memory Leaking");
+						e.printStackTrace();
+					}
+	        	}
+	        	
 	        }
 	    }
 	    YamlConfiguration conf = YamlConfiguration.loadConfiguration(lang);
