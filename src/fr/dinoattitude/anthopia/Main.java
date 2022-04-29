@@ -38,6 +38,7 @@ import fr.dinoattitude.anthopia.listeners.PlayerJoinListener;
 import fr.dinoattitude.anthopia.shops.listeners.ShopInteractionListener;
 import fr.dinoattitude.anthopia.shops.listeners.ShopInventoryListener;
 import fr.dinoattitude.anthopia.shops.listeners.ShopProtectionListener;
+import fr.dinoattitude.anthopia.utils.DatabaseManager;
 import fr.dinoattitude.anthopia.utils.Messages;
 import fr.dinoattitude.anthopia.utils.QuoteData;
 import net.milkbowl.vault.economy.Economy;
@@ -54,6 +55,8 @@ public class Main extends JavaPlugin{
 	
 	public static YamlConfiguration LANG;
 	public static File LANG_FILE;
+	
+	public final DatabaseManager DATABASE_MANAGER = new DatabaseManager();
 
 	@Override
 	public void onEnable() {
@@ -67,6 +70,9 @@ public class Main extends JavaPlugin{
 		//Controls before runnable
 		checkVaultApi();
 		loadLang();
+		
+		//Database
+		DATABASE_MANAGER.connexion();
 		
 		//Bourse
 		try {
@@ -121,9 +127,7 @@ public class Main extends JavaPlugin{
 
 	@Override
 	public void onDisable() {
-		//Dino : ThreadSafe update in PlayerQuitListener, no longer mandatory
-		//Sauvegarde des comptes bancaires des joueurs
-		//EconomyData.saveAllPlayersEconomy();
+		DATABASE_MANAGER.deconnexion();
 	}
 
 	//############################################################
